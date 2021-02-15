@@ -9,6 +9,7 @@ TagManager:
   - PausePanel
   - Circle
   - Music
+  - GameMaster
   layers:
   - Default
   - TransparentFX

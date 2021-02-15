@@ -5,29 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    private static SaveData _current;
-    public static SaveData current
+    public int currentLevel;
+    public string saveName;
+
+    public SaveData() : this(0) { }
+
+    public SaveData(int _currentLevel)
     {
-        get
-        {
-            if(_current == null)
-            {
-                _current = new SaveData();
-            }
-            return _current;
-        }
-        set
-        {
-            _current = value;
-        }
+        currentLevel = _currentLevel;
+        saveName = "Save";
     }
 
-    public int currentLevel;
-    public const string SaveName = "Save";
-
-    public SaveData()
+    public SaveData(int _currentLevel, string _saveName)
+        : this(_currentLevel)
     {
-        Debug.Log("creating new save data");
-        currentLevel = 0;
+        saveName = _saveName;
     }
 }

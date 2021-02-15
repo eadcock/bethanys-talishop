@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
-    float diameter;
-    float scaleFactor;
-    Vector2 currentPos;
-    Vector2 prevPos;
-    Dot[] connectedDots;
+    private float diameter;
+    private float scaleFactor;
+    private Vector2 currentPos;
+    private Vector2 prevPos;
+    private Dot[] connectedDots;
 
     public float X
     {
         get { return transform.position.x; }
     }
+
     public float Y
     {
         get { return transform.position.y; }
     }
+
     public float Radius
     {
         get {  return diameter/2; }
     }
+
     public bool IsDrawn
     {
         get { return connectedDots != null; }
     }
+
     public Dot[] ConnectedDots => connectedDots;
 
     // Start is called before the first frame update
@@ -90,6 +94,7 @@ public class Circle : MonoBehaviour
 
         currentPos = dotPos + (directon * diameter/2);
     }
+
     public void AddCircle(List<Dot> dots)
     {
         foreach(Dot d in dots)
@@ -98,6 +103,7 @@ public class Circle : MonoBehaviour
         }
         connectedDots = dots.ToArray();
     }
+
     public void DeleteCircle()
     {
         foreach (Dot d in connectedDots)

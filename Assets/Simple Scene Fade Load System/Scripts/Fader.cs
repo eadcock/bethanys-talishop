@@ -100,8 +100,6 @@ public class Fader : MonoBehaviour
 
         Initiate.DoneFading();
 
-        Debug.Log("Your scene has been loaded , and fading in has just ended");
-
         Destroy(gameObject);
 
         yield return null;

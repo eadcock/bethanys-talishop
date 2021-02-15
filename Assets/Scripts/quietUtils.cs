@@ -16,7 +16,7 @@ public enum Dimension
 
 namespace quiet
 {
-    public struct VectorUtils
+    public static class VectorUtils
     {
         #region Square Distance
         /// <summary>
@@ -217,7 +217,7 @@ namespace quiet
     /// <summary>
     /// A collection of loosely typed global variables
     /// </summary>
-    public struct Variables
+    public static class Variables
     {
         /// <summary>
         /// All variables
@@ -390,7 +390,7 @@ namespace quiet
     /// <summary>
     /// Methods that involve unity objects and functions
     /// </summary>
-    public struct UnityUtils
+    public static class UnityUtils
     {
         /// <summary>
         /// Spawn a GameObject at a specified position
@@ -448,7 +448,7 @@ namespace quiet
     /// <summary>
     /// Methods for detecting collisions
     /// </summary>
-    public struct Collision
+    public static class Collision
     {
         #region AABB
         /// <summary>

@@ -96,7 +96,7 @@ public class InputManager : MonoBehaviour
                 else if((circleToDelete = GetCircleOnMouse(mousePosition)) != null)
                 {
                     circleToDelete.DeleteCircle();
-                    IsPuzzleComplete();
+                    GameMaster.Instance.TestPuzzleComplete();
                     isDrawing = false;
                 }
                 else
@@ -171,7 +171,7 @@ public class InputManager : MonoBehaviour
 
                             currentDot = null;
                             //Checks to see if puzzle is finished
-                            IsPuzzleComplete();
+                            GameMaster.Instance.TestPuzzleComplete();
                         }
                         
                     }
@@ -247,30 +247,6 @@ public class InputManager : MonoBehaviour
             }
         }
         return null;
-    }
-
-    private void IsPuzzleComplete()
-    {
-        GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
-        Dot[] dots = dotObjects.Select(o => o.GetComponent<Dot>()).ToArray();
-        foreach (Dot dot in dots)
-        {
-            if (!dot.FinishedDot)
-            {
-                return;
-            }
-        }
-        //End puzzle logic here
-        EndPuzzle();
-    }
-
-    private async void EndPuzzle()
-    {
-        //End puzzle logic here
-        FindObjectOfType<SceneTrans>().FinishPuzzle();
-        await Task.Delay(1000);
-        endPanel.SetActive(true);
-        forward.SetActive(true);
     }
 
     public void ChangeState(int newState)

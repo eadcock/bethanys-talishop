@@ -8,10 +8,16 @@ public class DisableIfUnsaved : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        bool disable = (SaveData.current.currentLevel - 1 == int.Parse(SceneManager.GetActiveScene().name.Substring(6)));
-        Debug.Log(disable);
-        gameObject.SetActive(disable);
-        
+        if (GameMaster.Instance.Save.CurrentSaveData != null)
+        {
+            bool disable = GameMaster.Instance.Save.CurrentSaveData.currentLevel - 1 == GameMaster.Instance.ActiveLevel;
+            gameObject.SetActive(disable);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
+            
     }
 
     // Update is called once per frame

@@ -5,19 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneTrans : MonoBehaviour
 {
-    [SerializeField]
-    int puzzleNumber;
-
-    string currentScene;
-
     // Start is called before the first frame update
     void Start()
     {
-        currentScene = SceneManager.GetActiveScene().name;
-        if(currentScene.Contains("Puzzle") && !int.TryParse(currentScene.Substring(6), out puzzleNumber))
-        {
-            puzzleNumber = 0;
-        }
+        
     }
 
     // Update is called once per frame
@@ -33,22 +24,17 @@ public class SceneTrans : MonoBehaviour
 
     public void GoForward()
     {
-        string nextScene = SceneManager.GetSceneByName($"Puzzle{puzzleNumber + 1}") != null ? $"Puzzle{puzzleNumber + 1}" : "LevelSelect";
+        if (GameMaster.Instance.ActiveLevel is null) return;
+        
+        string nextNumPuzzle = $"Puzzle{GameMaster.Instance.ActiveLevel + 1}";
+        string nextScene = SceneManager.GetSceneByName(nextNumPuzzle) != null ? nextNumPuzzle : "LevelSelect";
         Initiate.Fade(nextScene, Color.black, 1);
     }
 
     public void GoBackward()
     {
-        Initiate.Fade(puzzleNumber - 1 == 0 ? "LevelSelect" : $"Puzzle{puzzleNumber - 1}", Color.black, 1);
-    }
+        if (GameMaster.Instance.ActiveLevel is null) return;
 
-    public void FinishPuzzle()
-    {
-        if(puzzleNumber >= SaveData.current.currentLevel)
-        {
-            SaveData.current.currentLevel = puzzleNumber + 1;
-            SerializationManager.Save(SaveData.SaveName, SaveData.current);
-            Debug.Log("Game saved");
-        }        
+        Initiate.Fade(GameMaster.Instance.ActiveLevel - 1 == 0 ? "LevelSelect" : $"Puzzle{GameMaster.Instance.ActiveLevel - 1}", Color.black, 1);
     }
 }
