@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         currentState = States.gameState;
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = GameMaster.Instance.Audio;
     }
 
     // Update is called once per frame
@@ -258,6 +258,7 @@ public class InputManager : MonoBehaviour
         currentState = (States)newState;
         pausePanel.SetActive(currentState == States.pauseState);
     }
+
     public void RestartPuzzle()
     {
         //Gets and resets all dots

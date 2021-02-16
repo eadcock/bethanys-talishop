@@ -75,11 +75,12 @@ public class GameMaster : MonoBehaviour
         SaveData data = save.LoadFromProfile(save.CurrentProfile);
         if (data != null && ActiveLevel >= data.currentLevel)
         {
-            save.SaveToProfile(save.CurrentProfile, data.currentLevel + 1);
+            save.SaveToFile(save.CurrentProfile, data.currentLevel + 1);
         }
 
         await Task.Delay(1000);
-        GameObject.Find("/GameUI/EndPanel").SetActive(true);
-        GameObject.Find("/GameUI/Forward").SetActive(true);
+        foreach(GameObject o in Resources.FindObjectsOfTypeAll<GameObject>())
+            if (o.name == "EndPanel" || o.name == "Forward")
+                o.SetActive(true);
     }
 }
