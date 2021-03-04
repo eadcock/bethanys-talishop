@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Dot : MonoBehaviour
 {
+
     [SerializeField]
     int requiredCircles = 1;
     int currentCircles;
@@ -34,6 +35,7 @@ public class Dot : MonoBehaviour
     void Start()
     {
         currentCircles = 0;
+        sr = gameObject.GetComponent<SpriteRenderer>();
         UpdateColor();
     }
 
@@ -63,10 +65,42 @@ public class Dot : MonoBehaviour
 
     void UpdateColor()
     {
-        sr = gameObject.GetComponent<SpriteRenderer>();
-        Color newColor = requiredCircles - currentCircles >= 0 ? Colors[requiredCircles - currentCircles] : Color.red;
-        sr.color = newColor;
-        if (sr.color.a != 1)
-            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
+        Sprite newSprite = SpriteLoader.LoadAndCreate(BuildSpritePath());
+        if (newSprite != null)
+            sr.sprite = newSprite;
+    }
+
+    private string BuildSpritePath()
+    {
+        string path = "Gems/";
+        switch (requiredCircles - currentCircles)
+        {
+            case 0:
+                path += $"Done/{requiredCircles} Done";
+                break;
+            case 1:
+                path += $"{requiredCircles}/{requiredCircles}Blue";
+                break;
+            case 2:
+                path += $"{requiredCircles}/{requiredCircles}Purple";
+                break;
+            case 3:
+                path += $"{requiredCircles}/{requiredCircles}Cyan";
+                break;
+            case 4:
+                path += $"{requiredCircles}/{requiredCircles}Green";
+                break;
+            case 5:
+                path += $"{requiredCircles}/{requiredCircles}Orange";
+                break;
+            case 6:
+                path += $"{requiredCircles}/{requiredCircles}Pink";
+                break;
+            default:
+                path += $"Corrupted/{requiredCircles} Corrupted";
+                break;
+        }
+
+        return path;
     }
 }

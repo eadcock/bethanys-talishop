@@ -60,9 +60,7 @@ public class SaveManager : MonoBehaviour
 
     public SaveData LoadFromProfile(string profile)
     {
-        SaveData save;
-
-        return SaveData.TryGetValue(profile, out save) ? save : null;
+        return SaveData.TryGetValue(profile, out SaveData save) ? save : null;
     }
 
     public SaveData LoadFile(string profile)

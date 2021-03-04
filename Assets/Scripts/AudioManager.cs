@@ -2,38 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AudioManager : MonoBehaviour
 {
+    public enum Direction
+    {
+        Down = -1,
+        Up = 1,
+    }
+
     [SerializeField]
     GameObject musicPrefab;
-    GameObject musicInstance;
     AudioSource musicAS;
     public bool IsPlaying => !musicAS.mute;
 
     // Start is called before the first frame update
     void Start()
     {
-        if((musicInstance = GameObject.FindGameObjectWithTag("Music")) == null)
-        {
-            musicInstance = Instantiate(musicPrefab);
-        } 
-
-        musicAS = musicInstance.GetComponent<AudioSource>();
+        musicAS = gameObject.AddComponent<AudioSource>();
     }
 
-    public void Play()
+    public void PlayMusic()
     {
-        musicAS.mute = false;
+        musicAS.Play();
     }
 
-    public void Mute()
+    public void PauseMusic()
+    {
+        musicAS.Pause();
+    }
+
+    public void MuteMusic()
     {
         musicAS.mute = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetVolume(float vol)
     {
-        
+        musicAS.volume = Mathf.Clamp(vol, 0.0f, 1.0f);
+    }
+
+    public void ChangeVolume(Direction dir)
+    {
+        musicAS.volume = Mathf.Clamp01(dir == Direction.Down ? musicAS.volume - 0.1f : musicAS.volume + 0.1f);
     }
 }

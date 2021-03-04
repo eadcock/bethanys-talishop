@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialogue>
+  <tutorial level="1" init="intro">
+    <line speaker="beth" mood="smile">
+      Oh my god! Hi! I'm so happy you decided to lend a hand around here. It's pretty lonely... er, let&apos;s jump right in!
+    </line>
+    <line speaker="beth" mood="talk">
+      You're new to making talismans, right? Don't worry, I can tell you everything you need to know. It&apos;s not that difficult, trust!
+    </line>
+    <line speaker="beth" mood="right">
+      See, these gems have innate magical properties. By linking circles together, the gems' magic can be stabalized and utilized for our own desires. Really precise stuff, but you don't have to worry about that. Sorcerers far smarter than you and me have already figured this stuff out.
+    </line>
+    <line speaker="beth" mood="talk">
+      Now, give it a go. Click on a gem bring out it's magic. Then, click on another circle to connect the gems. If the circuit connects exactly 4 circles, it succeeds! Otherwise it'll dissipate.
+    </line>
+    <line speaker="beth" mood="talk">
+      Here, give it a shot. Stabalize these 4 gems.
+    </line>
+  </tutorial>
+  <tutorial level="1" init="outro">
+    <text speaker="beth" mood="smile">
+      Look at you! Getting the hang of things! I'm so proud of you!
+    </text>
+    <text speaker="beth" mood="talk">
+      Alright, I gotta go take care of some stuff. Just, keep working on these talismans and if you have any questions... I'll be back! Ask me then! Byeee!
+    </text>
+  </tutorial>
+</dialogue>

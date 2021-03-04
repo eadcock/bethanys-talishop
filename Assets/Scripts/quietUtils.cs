@@ -7,15 +7,15 @@ using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 using System.Transactions;
 
-public enum Dimension
-{
-    X,
-    Y,
-    Z
-}
-
 namespace quiet
 {
+    public enum Dimension
+    {
+        X,
+        Y,
+        Z
+    }
+
     public static class VectorUtils
     {
         #region Square Distance
@@ -224,8 +224,7 @@ namespace quiet
         /// </summary>
         public static Dictionary<string, object> variables =
             new Dictionary<string, object>() {
-                { "bounds", new Bounds(new Vector3(50, 0, 50), new Vector3(95, 95, 95)) },
-                { "center", new Vector3(50, 0, 50) }
+                { "DebugToggle", false },
             };
 
         /// <summary>
@@ -298,7 +297,7 @@ namespace quiet
 
         #region Initialize
         /// <summary>
-        /// If an variable doesn't exist with the given name, create one, set it's value to value and return it's value. if it already exists, just return it's value
+        /// If a variable doesn't exist with the given name, create one, set it's value to value and return it's value. if it already exists, just return it's value
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -704,6 +703,35 @@ namespace quiet
     {
         public static int Map(int value, int fromLow, int fromHigh, int toLow, int toHigh) => (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
         public static float Map(float value, float fromLow, float fromHigh, float toLow, float toHigh) => (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
-        public static bool InRange(float value, float min, float max) => !(!(value <= min) || !(value >= max));
+        public static bool InRange(this float value, float min, float max) => !(!(value <= min) || !(value >= max));
+        public static bool InRange(this int value, int min, int max) => value >= min && value <= max;
+    }
+
+    public class StateManager<TEnum> where TEnum : struct, Enum
+    {
+        private TEnum currentState;
+
+        private readonly HashSet<TEnum> enumValues = new HashSet<TEnum>((TEnum[])Enum.GetValues(typeof(TEnum)));
+
+        public TEnum State => currentState;
+
+        public StateManager(TEnum startingState)
+        {
+            currentState = startingState;
+        }
+
+        public bool IsValid(TEnum state) => enumValues.Contains(state);
+
+        public void SwapState(TEnum newState)
+        {
+            if (!IsValid(newState)) throw new InvalidCastException($"{newState} is not a valid state of type {typeof(TEnum)}");
+            if (newState.Equals(currentState)) return;
+
+            if(Variables.Get<bool>("DebugToggle"))
+                Debug.Log($"Swapping states from {currentState} to {newState}");
+
+            currentState = newState;
+
+        }
     }
 }

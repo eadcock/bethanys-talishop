@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using quiet;
 
 public class Circle : MonoBehaviour
 {
@@ -37,7 +38,6 @@ public class Circle : MonoBehaviour
     {
 
         currentPos = prevPos = transform.position;
-        Sprite circleSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
         scaleFactor = transform.localScale.x;
         connectedDots = null;
 
@@ -49,7 +49,7 @@ public class Circle : MonoBehaviour
     {
         if(currentPos != prevPos)
         {
-            transform.position = currentPos;
+            transform.position = currentPos.FillDim(Dimension.Z, 0.5f);
             transform.localScale = new Vector3(diameter * scaleFactor, diameter * scaleFactor, 0);
         }
     }
@@ -61,38 +61,38 @@ public class Circle : MonoBehaviour
         //Gets displacements angle
         float angle = Vector2.SignedAngle(new Vector2(1, 0), displacement);
 
-
         //Decides which direction to draw circle
-        Vector2 directon = new Vector2(0,0);
+        Vector2 direction = new Vector2(0,0);
         if (angle <= 45 && angle > -45)
         {
             //Right
-            directon.x = 1;
+            direction.x = 1;
         }
         else if(angle <= 135 && angle > 45)
         {
             //Up
-            directon.y = 1;
+            direction.y = 1;
 
         }
         else if(angle <= -135 || angle > 135)
         {
             //Left
-            directon.x = -1;
+            direction.x = -1;
 
         }
         else if(angle <= -45 && angle > -135)
         {
             //Down
-            directon.y = -1;
+            direction.y = -1;
 
         }
 
-        diameter = Vector3.Dot(directon, displacement);
+
+        diameter = Vector3.Dot(direction, displacement);
 
         prevPos = currentPos;
 
-        currentPos = dotPos + (directon * diameter/2);
+        currentPos = dotPos + (direction * diameter/2);
     }
 
     public void AddCircle(List<Dot> dots)

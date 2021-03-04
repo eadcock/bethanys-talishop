@@ -22,15 +22,13 @@ public class Mute : MonoBehaviour, IPointerClickHandler
     {
         am = FindObjectOfType<AudioManager>();
         coh = GetComponent<ChangeOnHover>();
-        
-        
     }
 
     private void ToggleMute()
     {
         if (am.IsPlaying)
         {
-            am.Mute();
+            am.MuteMusic();
             coh.DefaultSprite = muteSprite;
             coh.HoverSprite = muteSprite_h;
 
@@ -38,7 +36,7 @@ public class Mute : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            am.Play();
+            am.PlayMusic();
             coh.DefaultSprite = playingSprite;
             coh.HoverSprite = playingSprite_h;
 
