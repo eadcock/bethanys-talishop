@@ -118,15 +118,6 @@ public class GameMaster : MonoBehaviour
                 if (o.name == "Forward")
                 {
                     forwardArrow = o;
-                    if (ActiveLevel != null && Save.CurrentSaveData != null)
-                    {
-                        Debug.Log(Save.CurrentSaveData.currentLevel + " " + ActiveLevel);
-                        forwardArrow.SetActive(Save.CurrentSaveData.currentLevel > ActiveLevel);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("No save data");
-                    }
                 }
 
                 if (o.name == "EndPanel")
