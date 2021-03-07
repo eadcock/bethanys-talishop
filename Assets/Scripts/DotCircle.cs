@@ -6,6 +6,7 @@ using UnityEditor;
 #if (UNITY_EDITOR) 
 [CustomEditor(typeof(DotCircle))]
 [ExecuteInEditMode]
+#endif
 public class DotCircle : MonoBehaviour
 {
     public int diameter;
@@ -44,6 +45,7 @@ public class DotCircle : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 // Custom Editor the "old" way by modifying the script variables directly.
 // No handling of multi-object editing, undo, and Prefab overrides!
 [CustomEditor(typeof(DotCircle))]

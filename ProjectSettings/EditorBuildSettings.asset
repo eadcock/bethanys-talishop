@@ -20,9 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Puzzle15.unity
     guid: 99035134a14e8a74bb4eadb25fafc73d
-  - enabled: 1
-    path: Assets/Scenes/Puzzle17.unity
-    guid: e86dda0e000e42840a7fecb19e18d76f
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Puzzle18.unity
     guid: a25a14d769bbb1f4bb09652f2ad96554
@@ -74,4 +74,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Puzzle21.unity
     guid: af0e31df350765c418f00cba40248392
+  - enabled: 1
+    path: Assets/Scenes/Puzzle17.unity
+    guid: a543a141de52afc4fa8dc906ab145313
+  - enabled: 1
+    path: Assets/Scenes/Puzzle22.unity
+    guid: b173fef5f8780c545a94ff635f82ed55
+  - enabled: 1
+    path: Assets/Scenes/Puzzle23.unity
+    guid: f74054a0f1cafbe48b63ac40bdb46047
   m_configObjects: {}

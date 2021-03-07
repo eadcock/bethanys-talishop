@@ -684,9 +684,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8196257368094668935, guid: 20330150452b90b4ab777398a683ca91, type: 3}
+      - m_Target: {fileID: 8196257368094668933, guid: 20330150452b90b4ab777398a683ca91, type: 3}
         m_TargetAssemblyTypeName: GameMaster, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

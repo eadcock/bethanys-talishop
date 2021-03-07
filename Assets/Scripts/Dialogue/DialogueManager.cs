@@ -105,7 +105,7 @@ public class DialogueManager : MonoBehaviour
         dialogue = new List<Dialogue>();
 
         XmlDocument doc = new XmlDocument();
-        doc.Load(Application.dataPath + @"\Scripts\Dialogue\dialogue.xml");
+        doc.Load(Application.streamingAssetsPath + @"\dialogue.xml");
 
         XmlNode root = doc.DocumentElement;
 
