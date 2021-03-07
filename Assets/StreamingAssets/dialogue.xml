@@ -30,7 +30,7 @@
     <line speaker="beth" mood="smile">You probably already know what I&apos;m going to say, but I&apos;ll say it anyway.</line>
     <line speaker="beth" mood="right">This baby right takes four circuits to be satisfied, kinda like how a circuit needs four gems to be satisfied. How ciclical...</line>
   </chapter>
-  <chapter level="24" init="outro" end-behavior="none">
+  <chapter level="23" init="outro" end-behavior="none">
     <line speaker="beth" mood="talk">Hey! That was the last playable puzzle in this build, thanks for playtesting all the way to end!</line>
     <line speaker="beth" mood="talk">Be sure to fill out the google form so we can have all your feedback in one place! If there is anything you'd like to say to us, you can always message in the discord.</line>
     <line speaker="beth" mood="talk">Again, thank you so much!</line>

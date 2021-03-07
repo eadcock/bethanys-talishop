@@ -10,7 +10,7 @@ public class DisableIfUnsaved : MonoBehaviour
     {
         if (GameMaster.Instance.Save.CurrentSaveData != null)
         {
-            bool disable = GameMaster.Instance.Save.CurrentSaveData.currentLevel != GameMaster.Instance.ActiveLevel;
+            bool disable = GameMaster.Instance.Save.CurrentSaveData.currentLevel != GameMaster.Instance.ActiveLevel && GameMaster.Instance.ActiveLevel != 23;
             Debug.Log(disable);
             gameObject.SetActive(disable);
         }

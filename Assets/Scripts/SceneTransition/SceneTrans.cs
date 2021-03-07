@@ -41,7 +41,7 @@ public class SceneTrans : MonoBehaviour
         if (GameMaster.Instance.ActiveLevel != null)
         {
             string nextNumPuzzle = $"Puzzle{GameMaster.Instance.ActiveLevel + 1}";
-            string nextScene = SceneManager.GetSceneByName(nextNumPuzzle) != null ? nextNumPuzzle : "LevelSelect";
+            string nextScene = GameMaster.Instance.ActiveLevel + 1 != 24 ? nextNumPuzzle : "LevelSelect";
             Initiate.Fade(nextScene, Color.black, 1);
         }
         
