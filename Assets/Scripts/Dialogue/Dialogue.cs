@@ -14,10 +14,11 @@ public class Dialogue : IEnumerable<DialogueLine>
         { "beth", DialogueLine.Beth },
         { "player", DialogueLine.Player },
     };
+
     public DialogueLine[] lines;
     public int level;
     public string init;
-
+    public Action endBehaviour;
     private int currentLine;
 
     public Dialogue(IEnumerable<DialogueLine> lines, int level, string init = "start")
@@ -43,6 +44,19 @@ public class Dialogue : IEnumerable<DialogueLine>
         this.lines = lines.ToArray();
         this.level = level;
         this.init = text.Attributes?["init"].Value ?? "start";
+
+        if(text.Attributes["end-behaviour"] != null)
+        {
+            switch(text.Attributes["end-behaviour"].Value)
+            {
+                default:
+                    endBehaviour = () => { };
+                    break;
+                case "next-level":
+                    endBehaviour = GameMaster.Instance.SceneTransitioner.GoForward;
+                    break;
+            }
+        }
 
         currentLine = -1;
     }
@@ -72,6 +86,6 @@ public class Dialogue : IEnumerable<DialogueLine>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return lines.GetEnumerator();
     }
 }

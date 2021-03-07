@@ -47,6 +47,6 @@ public struct DialogueLine
 
     public override string ToString()
     {
-        return speaker + line;
+        return speaker + "\n" + line;
     }
 }

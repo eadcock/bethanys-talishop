@@ -24,11 +24,13 @@ public class SceneTrans : MonoBehaviour
 
     public void GoForward()
     {
-        if (GameMaster.Instance.ActiveLevel is null) return;
+        if (GameMaster.Instance.ActiveLevel != null)
+        {
+            string nextNumPuzzle = $"Puzzle{GameMaster.Instance.ActiveLevel + 1}";
+            string nextScene = SceneManager.GetSceneByName(nextNumPuzzle) != null ? nextNumPuzzle : "LevelSelect";
+            Initiate.Fade(nextScene, Color.black, 1);
+        }
         
-        string nextNumPuzzle = $"Puzzle{(GameMaster.Instance.ActiveLevel + 1 == 17 ? 18 : GameMaster.Instance.ActiveLevel + 1)}";
-        string nextScene = SceneManager.GetSceneByName(nextNumPuzzle) != null ? nextNumPuzzle : "LevelSelect";
-        Initiate.Fade(nextScene, Color.black, 1);
     }
 
     public void GoBackward()

@@ -5,11 +5,9 @@ using UnityEngine.EventSystems;
 
 public class NextPuzzle : MonoBehaviour, IPointerClickHandler
 {
-    private SceneTrans trans;
     // Start is called before the first frame update
     void Start()
     {
-        trans = GetComponentInParent<SceneTrans>();
     }
 
     // Update is called once per frame
@@ -20,6 +18,6 @@ public class NextPuzzle : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        trans.GoForward();
+        GameMaster.Instance.SceneTransitioner.GoForward();
     }
 }

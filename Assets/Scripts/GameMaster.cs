@@ -37,6 +37,8 @@ public class GameMaster : MonoBehaviour
 
     public DialogueManager Dialogue => _dialogue == null ? (_dialogue = gameObject.AddComponent<DialogueManager>()) : _dialogue;
 
+    public SceneTrans SceneTransitioner { get; private set; }
+
     public StateManager<GameState> GameStateManager { get; private set; }
     public GameState CurrentGameState => GameStateManager.State;
 
@@ -76,6 +78,8 @@ public class GameMaster : MonoBehaviour
         Instance.GameStateManager = new StateManager<GameState>(GameState.Playing);
         SceneManager.sceneLoaded += InitIfNeeded;
         InitIfNeeded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+
+        SceneTransitioner = GetComponent<SceneTrans>();
     }
     
     // If components don't currently exist, ensure that they do when a scene is loaded.
@@ -90,22 +94,31 @@ public class GameMaster : MonoBehaviour
         if (_audio is null)
             _audio = gameObject.AddComponent<AudioManager>();
 
-        if (_dialogue is null)
+        if (SceneTransitioner == null)
         {
-            _dialogue = gameObject.AddComponent<DialogueManager>();
-            Dialogue.Init();
-            Dialogue.LoadDialogue();
+            SceneTransitioner = gameObject.AddComponent<SceneTrans>();
         }
 
         if (ActiveLevel != null)
         {
+            if (_dialogue is null)
+            {
+                _dialogue = gameObject.AddComponent<DialogueManager>();
+                Dialogue.Init();
+                Dialogue.LoadDialogue();
+            }
+            else
+            {
+                Dialogue.Init();
+            }
+
             GameObject[] endObjects = GameObject.FindGameObjectsWithTag("EndPanel");
-            foreach(GameObject o in endObjects)
+            foreach (GameObject o in endObjects)
             {
                 if (o.name == "Forward")
                 {
                     forwardArrow = o;
-                    if(ActiveLevel != null && Save.CurrentSaveData != null)
+                    if (ActiveLevel != null && Save.CurrentSaveData != null)
                     {
                         Debug.Log(Save.CurrentSaveData.currentLevel + " " + ActiveLevel);
                         forwardArrow.SetActive(Save.CurrentSaveData.currentLevel > ActiveLevel);
@@ -123,8 +136,9 @@ public class GameMaster : MonoBehaviour
                 }
             }
 
+            Debug.Log("Done!");
             // Check if there is any intro dialogue
-            if(Dialogue.ShouldStart(GameState.Intro))
+            if (Dialogue.ShouldStart(GameState.Intro))
             {
                 Instance.GameStateManager.SwapState(GameState.Intro);
                 Dialogue.StartPlayingDialogue(GameState.Playing);
@@ -134,6 +148,7 @@ public class GameMaster : MonoBehaviour
                 Instance.GameStateManager.SwapState(GameState.Playing);
             }
         }
+
     }
 
     /// <summary>
@@ -322,4 +337,14 @@ public class GameMaster : MonoBehaviour
         GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().UnPause();
         Instance.GameStateManager.SwapState(GameState.Playing);
     }
+
+    public static void Quit()
+    {
+        Instance.Save.SaveToFile(Instance.Save.CurrentProfile);
+        Application.Quit();
+    }
+
+    public static void SwapToScene(string scene) => Instance.SceneTransitioner.ToScene(scene);
+
+    public static void SwapToScene(Scene scene) => Instance.SceneTransitioner.ToScene(scene.name);
 }

@@ -127,9 +127,11 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    public Dot GetDotOnMouse(float error = 0.1f) => GetDotAtPos(MousePosition, error);
+    const float DEFAULT_ERROR = 0.125f;
 
-    public Dot GetDotAtPos(Vector2 pos, float error = 0.1f)
+    public Dot GetDotOnMouse(float error = DEFAULT_ERROR) => GetDotAtPos(MousePosition, error);
+
+    public Dot GetDotAtPos(Vector2 pos, float error = DEFAULT_ERROR)
     {
         GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
         Dot[] dots = dotObjects.Select(o => o.GetComponent<Dot>()).ToArray();
@@ -144,7 +146,7 @@ public class InputManager : MonoBehaviour
         return null;
     }
 
-    public Circle GetCircleOnMouse(float error = 0.1f)
+    public Circle GetCircleOnMouse(float error = DEFAULT_ERROR)
     {
         GameObject[] circleObjects = GameObject.FindGameObjectsWithTag("Circle");
         Circle[] circles = circleObjects.Select(o => o.GetComponent<Circle>()).ToArray();
@@ -185,10 +187,5 @@ public class InputManager : MonoBehaviour
 
         //Returns to game state
         GameMaster.Instance.GameStateManager.SwapState(0);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
 }

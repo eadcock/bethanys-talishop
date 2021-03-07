@@ -46,3 +46,5 @@ MonoBehaviour:
   CurrentCircle: {fileID: 0}
   CurrentDot: {fileID: 0}
   circlePrefab: {fileID: 4694834674066742686, guid: 3dc440359456a744d886042501f51e13, type: 3}
+  endPanel: {fileID: 0}
+  forwardArrow: {fileID: 0}

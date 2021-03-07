@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialogue>
-  <tutorial level="1" init="intro">
-    <line speaker="beth" mood="smile">
-      Oh my god! Hi! I'm so happy you decided to lend a hand around here. It's pretty lonely... er, let&apos;s jump right in!
-    </line>
-    <line speaker="beth" mood="talk">
-      You're new to making talismans, right? Don't worry, I can tell you everything you need to know. It&apos;s not that difficult, trust!
-    </line>
-    <line speaker="beth" mood="right">
-      See, these gems have innate magical properties. By linking circles together, the gems' magic can be stabalized and utilized for our own desires. Really precise stuff, but you don't have to worry about that. Sorcerers far smarter than you and me have already figured this stuff out.
-    </line>
-    <line speaker="beth" mood="talk">
-      Now, give it a go. Click on a gem bring out it's magic. Then, click on another circle to connect the gems. If the circuit connects exactly 4 circles, it succeeds! Otherwise it'll dissipate.
-    </line>
-    <line speaker="beth" mood="talk">
-      Here, give it a shot. Stabalize these 4 gems.
-    </line>
-  </tutorial>
-  <tutorial level="1" init="outro">
-    <text speaker="beth" mood="smile">
-      Look at you! Getting the hang of things! I'm so proud of you!
-    </text>
-    <text speaker="beth" mood="talk">
-      Alright, I gotta go take care of some stuff. Just, keep working on these talismans and if you have any questions... I'll be back! Ask me then! Byeee!
-    </text>
-  </tutorial>
+  <chapter level="1" init="intro" end-behaviour="none">
+    <line speaker="beth" mood="smile">Oh my god! Hi! I'm so happy you decided to lend a hand around here. It&apos;s pretty lonely... er, let&apos;s jump right in!</line>
+    <line speaker="beth" mood="talk">You're new to making talismans, right? Don't worry, I can tell you everything you need to know. It&apos;s not that difficult, trust!</line>
+    <line speaker="beth" mood="right">See, these gems have innate magical properties. By linking circles together, the gems' magic can be stabalized and utilized for our own desires. Really precise stuff, but you don't have to worry about that. Sorcerers far smarter than you and me have already figured this stuff out.</line>
+    <line speaker="beth" mood="talk">Now, give it a go. Click on a gem bring out it's magic. Then, click on another circle to connect the gems. If the circuit connects exactly 4 gems, it succeeds! Otherwise it'll dissipate.</line>
+    <line speaker="beth" mood="talk">Here, give it a shot. Stabalize these 4 gems.</line>
+  </chapter>
+  <chapter level="1" init="outro" end-behaviour="next-level">
+    <line speaker="beth" mood="smile">Look at you getting the hang of things! I'm so proud of you!</line>
+    <line speaker="beth" mood="talk">Oooh, I&apos;m so excited. You're gonna be making cool stuff in no time! Only up!</line>
+  </chapter>
+  <chapter level="2" init="intro" end-behaviour="none">
+    <line speaker="beth" mood="right">Look at this gem! This is where things start getting interesting!</line>
+    <line speaker="beth" mood="talk">Certain gems contain more magical energy than other gems. This means one circle isn&apos;t enough to balance them out. This purple gem requires two circuits to balance it.</line>
+    <line speaker="beth" mood="talk">Notice when you attach one circuit to it, it will change color to blue. This means it&apos;s more stable than before, but it isn&apos;t quite happy! It needs another circuit!</line>
+    <line speaker="beth" mood="smile">Go on! Give it a try!</line>
+  </chapter>
+  <chapter level="2" init="outro" end-behaviour="next-level">
+    <line speaker="beth" mood="talk">Isn&apos;t this just the coolest!!? These next couple should give you a pretty good grasp on sorcery; it&apos;ll be fun!</line>
+    <line speaker="beth" mood="talk">Oh, and as the talismans start to get more complicated, you might make a mistake a form a wrong circuit. No problem, just click the circle to undo it!</line>
+  </chapter>
+  <chapter level="8" init="intro" end-behavior="none">
+    <line speaker="beth" mood="talk">See, this isn&apos;t so hard! Let&apos;s step this up a notch, yeah?</line>
+    <line speaker="beth" mood="right">New gem! The cyan gem requires three connections. Good luck!</line>
+  </chapter>
+  <chapter level="14" init="intro" end-behavior="none">
+    <line speaker="beth" mood="talk">You know what time it is! New gem time! Isn&apos;t this one pretty?</line>
+    <line speaker="beth" mood="smile">You probably already know what I&apos;m going to say, but I&apos;ll say it anyway.</line>
+    <line speaker="beth" mood="right">This baby right takes four circuits to be satisfied, kinda like how a circuit needs four gems to be satisfied. How ciclical...</line>
+  </chapter>
+  <chapter level="21" init="outro" end-behavior="none">
+    <line speaker="beth" mood="talk">Hey! That was the last playable puzzle in this build, thanks for playtesting all the way to end!</line>
+    <line speaker="beth" mood="talk">Be sure to fill out the google form so we can have all your feedback in one place! If there is anything you'd like to say to us, you can always message in the discord.</line>
+    <line speaker="beth" mood="talk">Again, thank you so much!</line>
+  </chapter>
 </dialogue>

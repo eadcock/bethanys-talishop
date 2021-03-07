@@ -18,5 +18,15 @@ public class LastPuzzle : MonoBehaviour, IPointerClickHandler
         
     }
 
-    public void OnPointerClick(PointerEventData eventData) => trans.ToScene("LevelSelect");
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(GameMaster.Instance.ActiveLevel == 1)
+        {
+            GameMaster.Instance.SceneTransitioner.ToScene("LevelSelect");
+        }
+        else
+        {
+            GameMaster.Instance.SceneTransitioner.GoBackward();
+        }
+    }
 }

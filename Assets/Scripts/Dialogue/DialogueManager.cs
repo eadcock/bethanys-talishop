@@ -35,10 +35,8 @@ public class DialogueManager : MonoBehaviour
     public void Init()
     {
         dialoguePanel = GameObject.FindGameObjectWithTag("Dialogue");
-        Debug.Log(dialoguePanel);
         foreach(Transform child in dialoguePanel.transform)
         {
-            Debug.Log(child.gameObject.name);
             GameObject go = child.gameObject;
             if(go.name == "Beth")
             {
@@ -86,12 +84,12 @@ public class DialogueManager : MonoBehaviour
         textObject.SetActive(false);
 
         GameMaster.Instance.GameStateManager.SwapState(resumeState);
+        CurrentDialogue.endBehaviour();
         currentDialogue++;
     }
 
     public bool ShouldStart(GameState phase)
     {
-        Debug.Log(currentDialogue + ", " + dialogue.Count);
         if (!currentDialogue.InRange(0, dialogue.Count - 1)) return false;
         return GameMaster.Instance.ActiveLevel == CurrentDialogue.level && phase.ToString().ToLower() == CurrentDialogue.init;
     }
@@ -114,11 +112,6 @@ public class DialogueManager : MonoBehaviour
         foreach(XmlNode n in root.ChildNodes)
         {
             dialogue.Add(new Dialogue(n));
-        }
-
-        foreach(Dialogue d in dialogue)
-        {
-            Debug.Log(d);
         }
     }
 }

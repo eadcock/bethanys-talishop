@@ -18,23 +18,6 @@ public class TitleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // fade in text after a few seconds
-        // text.setactive(true)
-        if (textCountdown <= 0.0f)
-        {
-            text.text = "Press any key to continue";
-
-            // check if user presses a key and go to tutorial
-            if (Input.anyKeyDown)
-            {
-                sceneTrans.ToScene("LevelSelect");
-            }
-        }
-        else
-        {
-            textCountdown -= Time.deltaTime;
-        }
-
         
     }
 }
