@@ -13,11 +13,9 @@ public class LevelSelect : MonoBehaviour
 
         save.LoadFile(save.CurrentProfile);
 
-        if (save.RequireProfileInit) save.SaveToProfile(save.CurrentProfile, 1);
+        if (save.RequireProfileInit) save.SaveLevelToProfile(save.CurrentProfile, 1);
 
         int currentLevel = save.LoadFromProfile(save.CurrentProfile)?.currentLevel ?? 1;
-
-        Debug.Log(currentLevel);
 
         //Gets all level buttons
         Button[] levelButtons = GetComponentsInChildren<Button>();

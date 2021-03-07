@@ -10,6 +10,7 @@ public class Circle : MonoBehaviour
     private Vector2 currentPos;
     private Vector2 prevPos;
     private Dot[] connectedDots;
+    private SpriteRenderer sr;
 
     public float X
     {
@@ -40,6 +41,7 @@ public class Circle : MonoBehaviour
         currentPos = prevPos = transform.position;
         scaleFactor = transform.localScale.x;
         connectedDots = null;
+        sr = GetComponent<SpriteRenderer>();
 
         ResizeCircle(new Vector2(0, 0), new Vector2(-2, 0));
     }
@@ -47,7 +49,9 @@ public class Circle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentPos != prevPos)
+        if (!sr.enabled) sr.enabled = true;
+
+        if (currentPos != prevPos)
         {
             transform.position = currentPos.FillDim(Dimension.Z, 0.5f);
             transform.localScale = new Vector3(diameter * scaleFactor, diameter * scaleFactor, 0);
@@ -93,6 +97,12 @@ public class Circle : MonoBehaviour
         prevPos = currentPos;
 
         currentPos = dotPos + (direction * diameter/2);
+    }
+
+    public void ResizeImmediate(Vector2 dotPos, Vector2 mousePos)
+    {
+        ResizeCircle(dotPos, mousePos);
+        transform.localScale = new Vector3(diameter * scaleFactor, diameter * scaleFactor, 0);
     }
 
     public void AddCircle(List<Dot> dots)

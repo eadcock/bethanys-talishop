@@ -78,6 +78,11 @@ public class Dialogue : IEnumerable<DialogueLine>
         return lines[currentLine];
     }
 
+    public void ResetLine()
+    {
+        currentLine = 0;
+    }
+
     public IEnumerator<DialogueLine> GetEnumerator()
     {
         for (int i = 0; i < lines.Length; i++)

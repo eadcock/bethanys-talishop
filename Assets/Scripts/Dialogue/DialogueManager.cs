@@ -29,7 +29,7 @@ public class DialogueManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentDialogue = 0;
+
     }
 
     public void Init()
@@ -86,6 +86,7 @@ public class DialogueManager : MonoBehaviour
         GameMaster.Instance.GameStateManager.SwapState(resumeState);
         CurrentDialogue.endBehaviour();
         currentDialogue++;
+        GameMaster.Instance.Save.SaveDialogueToProfile(GameMaster.Instance.Save.CurrentProfile, currentDialogue);
     }
 
     public bool ShouldStart(GameState phase)
@@ -113,5 +114,7 @@ public class DialogueManager : MonoBehaviour
         {
             dialogue.Add(new Dialogue(n));
         }
+
+        currentDialogue = GameMaster.Instance.Save.CurrentSaveData.currentDialogue;
     }
 }

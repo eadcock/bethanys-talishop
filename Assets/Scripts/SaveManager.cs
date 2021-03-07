@@ -42,7 +42,7 @@ public class SaveManager : MonoBehaviour
 
     public bool SaveToFile(string profile, int level)
     {
-        SaveToProfile(profile, level);
+        SaveLevelToProfile(profile, level);
         return SaveToFile(profile);
     }
 
@@ -52,7 +52,7 @@ public class SaveManager : MonoBehaviour
         return SaveToFile(profile);
     }
 
-    public void SaveToProfile(string profile, int level) 
+    public void SaveLevelToProfile(string profile, int level) 
     { 
         if(SaveData.ContainsKey(profile))
         {
@@ -70,6 +70,14 @@ public class SaveManager : MonoBehaviour
             SaveData[profile].options = options;
         else
             SaveData.Add(profile, new SaveData(profile, options));
+    }
+
+    public void SaveDialogueToProfile(string profile, int currentDialogue)
+    {
+        if (SaveData.ContainsKey(profile))
+            SaveData[profile].currentDialogue = currentDialogue;
+        else
+            SaveData.Add(profile, new SaveData(profile, currentDialogue));
     }
 
     public SaveData LoadFromProfile(string profile)
