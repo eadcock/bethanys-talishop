@@ -57,6 +57,10 @@ public class Dialogue : IEnumerable<DialogueLine>
                     break;
             }
         }
+        else
+        {
+            endBehaviour = () => { };
+        }
 
         currentLine = -1;
     }

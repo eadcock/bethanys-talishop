@@ -60,6 +60,7 @@ public class InputManager : MonoBehaviour
                     BroadcastMessage("UnPause");
                 }
                 break;
+            case GameState.Ending:
             case GameState.Outro:
             case GameState.Intro:
                 if (Input.GetKeyDown(KeyCode.Escape))

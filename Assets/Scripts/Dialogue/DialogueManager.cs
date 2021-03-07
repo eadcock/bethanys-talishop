@@ -7,18 +7,16 @@ using quiet;
 
 public class DialogueManager : MonoBehaviour
 {
-    List<Dialogue> dialogue;
+    private static List<Dialogue> dialogue;
+    private static int currentDialogue;
+    private static GameState resumeState;
 
-    private int currentDialogue;
+    public static GameObject dialoguePanel;
+    public static GameObject bethObject;
+    public static GameObject textObject;
+    public static TMPro.TextMeshProUGUI text;
 
-    public GameObject dialoguePanel;
-    public GameObject bethObject;
-    public GameObject textObject;
-    public TMPro.TextMeshProUGUI text;
-
-    private GameState resumeState;
-
-    public Dialogue CurrentDialogue
+    public static Dialogue CurrentDialogue
     {
         get
         {
@@ -55,7 +53,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartPlayingDialogue(GameState resumeState)
     {
-        this.resumeState = resumeState;
+        DialogueManager.resumeState = resumeState;
 
         // Display beth and the text box
         bethObject.SetActive(true);
@@ -74,7 +72,7 @@ public class DialogueManager : MonoBehaviour
 
         // Update Beth sprite and text
         bethObject.GetComponent<Beth>().SwapMood(text.Value.Mood);
-        this.text.text = text.ToString();
+        DialogueManager.text.text = text.ToString();
     }
 
     public void StopPlayingDialogue()
@@ -84,7 +82,7 @@ public class DialogueManager : MonoBehaviour
         textObject.SetActive(false);
 
         GameMaster.Instance.GameStateManager.SwapState(resumeState);
-        CurrentDialogue.endBehaviour();
+        CurrentDialogue?.endBehaviour();
         currentDialogue++;
         GameMaster.Instance.Save.SaveDialogueToProfile(GameMaster.Instance.Save.CurrentProfile, currentDialogue);
     }
