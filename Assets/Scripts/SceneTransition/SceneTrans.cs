@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class SceneTrans : MonoBehaviour
 {
@@ -19,6 +21,18 @@ public class SceneTrans : MonoBehaviour
 
     public void ToScene(string sceneName)
     {
+        Collection<GameObject> objectsToMove = new Collection<GameObject>();
+        if(SceneManager.GetActiveScene().name == "LevelSelect")
+        {
+            foreach(GameObject o in GameObject.FindGameObjectsWithTag("LevelButton"))
+            {
+                objectsToMove.Add(o);
+            }
+        }
+        else
+        {
+            
+        }
         Initiate.Fade(sceneName, Color.black, 1);
     }
 

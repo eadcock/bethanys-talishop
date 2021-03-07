@@ -136,7 +136,6 @@ public class GameMaster : MonoBehaviour
                 }
             }
 
-            Debug.Log("Done!");
             // Check if there is any intro dialogue
             if (Dialogue.ShouldStart(GameState.Intro))
             {
@@ -326,17 +325,23 @@ public class GameMaster : MonoBehaviour
                 o.SetActive(true);
     }
 
+    private static GameState stateBeforePause;
+
     public void Pause()
     {
         GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().Pause();
+        Debug.Log(Instance.CurrentGameState);
+        stateBeforePause = Instance.CurrentGameState;
         Instance.GameStateManager.SwapState(GameState.Paused);
     }
 
     public void UnPause()
     {
         GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().UnPause();
-        Instance.GameStateManager.SwapState(GameState.Playing);
+        Instance.GameStateManager.SwapState(stateBeforePause);
     }
+
+    public void HidePause() => GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().UnPause();
 
     public static void Quit()
     {
@@ -347,4 +352,25 @@ public class GameMaster : MonoBehaviour
     public static void SwapToScene(string scene) => Instance.SceneTransitioner.ToScene(scene);
 
     public static void SwapToScene(Scene scene) => Instance.SceneTransitioner.ToScene(scene.name);
+
+    public void RestartPuzzle()
+    {
+        //Gets and resets all dots
+        GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
+        Dot[] dots = dotObjects.Select(o => o.GetComponent<Dot>()).ToArray();
+        foreach (Dot dot in dots)
+        {
+            dot.Reset();
+        }
+
+        //Gets and destroys all circles
+        GameObject[] circles = GameObject.FindGameObjectsWithTag("Circle");
+        for (int i = circles.Length - 1; i >= 0; i--)
+        {
+            Destroy(circles[i]);
+        }
+
+        //Returns to game state
+        Instance.GameStateManager.SwapState(0);
+    }
 }

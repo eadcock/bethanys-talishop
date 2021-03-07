@@ -24,7 +24,6 @@ public class Beth : MonoBehaviour
 
     public void SwapMood(Mood newMood)
     {
-        Debug.Log(newMood);
         if (newMood == currentMood) return;
 
         currentMood = newMood;

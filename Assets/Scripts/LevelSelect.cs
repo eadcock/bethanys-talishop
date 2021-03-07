@@ -17,13 +17,15 @@ public class LevelSelect : MonoBehaviour
 
         int currentLevel = save.LoadFromProfile(save.CurrentProfile)?.currentLevel ?? 1;
 
+        Debug.Log(currentLevel);
+
         //Gets all level buttons
         Button[] levelButtons = GetComponentsInChildren<Button>();
 
-        //Activates all levels up to current one
-        for (int i = 0; i < currentLevel && i < levelButtons.Length; i++)
+
+        for (int i = 0; i < levelButtons.Length; i++)
         {
-            levelButtons[i].interactable = true;
+            levelButtons[i].interactable = i < currentLevel;
         }
     }
 

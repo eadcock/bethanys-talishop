@@ -498,6 +498,22 @@ PrefabInstance:
       propertyPath: m_FontData.m_MinSize
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 888863555168642373, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1232774899173486462, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534793176919129964, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011694491930311337, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4105059350737724804, guid: 518611018b425334e9b7996238466de1, type: 3}
       propertyPath: puzzleNumber
       value: 2
@@ -590,6 +606,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameUI
       objectReference: {fileID: 0}
+    - target: {fileID: 4105059350818863518, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4105059350902656968, guid: 518611018b425334e9b7996238466de1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Puzzle4
@@ -597,6 +617,14 @@ PrefabInstance:
     - target: {fileID: 5263339274120131805, guid: 518611018b425334e9b7996238466de1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.000011444092
+      objectReference: {fileID: 0}
+    - target: {fileID: 7392037180119141930, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7597707616463444311, guid: 518611018b425334e9b7996238466de1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 518611018b425334e9b7996238466de1, type: 3}

@@ -11,6 +11,7 @@ TagManager:
   - Music
   - GameMaster
   - Dialogue
+  - LevelButton
   layers:
   - Default
   - TransparentFX

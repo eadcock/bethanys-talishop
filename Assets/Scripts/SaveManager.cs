@@ -110,17 +110,22 @@ public class SaveManager : MonoBehaviour
 
     public bool DeleteProfile(string profile)
     {
-        if (!SaveData.ContainsKey(profile))
-            return false;
-
-        SaveData.Remove(profile);
+        Debug.Log(profile);
+        Debug.Log(SaveData.Count);
+        if (SaveData.ContainsKey(profile))
+            SaveData.Remove(profile);
 
         try
         {
             string dirPath = Application.persistentDataPath + "/saves/" + profile + ".save";
-            if (Directory.Exists(dirPath))
+            if (File.Exists(dirPath))
             {
-                Directory.Delete(dirPath);
+                File.Delete(dirPath);
+                Debug.Log("Deleted!");
+            }
+            else
+            {
+                Debug.Log("Doesn't exist! " + dirPath);
             }
         }
         catch

@@ -90,7 +90,7 @@ public class DialogueManager : MonoBehaviour
 
     public bool ShouldStart(GameState phase)
     {
-        if (!currentDialogue.InRange(0, dialogue.Count - 1)) return false;
+        if (!currentDialogue.InRange(0, dialogue.Count - 1) || GameMaster.Instance.Save.CurrentSaveData.options.skipDialogue) return false;
         return GameMaster.Instance.ActiveLevel == CurrentDialogue.level && phase.ToString().ToLower() == CurrentDialogue.init;
     }
 

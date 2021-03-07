@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GoBackTo
+{
+    Pause,
+    Title
+}
+
 public class OptionsManager : MonoBehaviour
 {
     public static Options options = new Options(false);
@@ -11,7 +17,6 @@ public class OptionsManager : MonoBehaviour
     {
         options.skipDialogue = val;
         
-        Debug.Log(val + "," + options.skipDialogue);
         SyncOptions();
     }
 
@@ -19,7 +24,7 @@ public class OptionsManager : MonoBehaviour
     {
         foreach(Transform t in transform)
         {
-            switch(t.gameObject.name)
+            switch (t.gameObject.name)
             {
                 case "SkipDialogue":
                     t.gameObject.GetComponent<Toggle>().SetIsOnWithoutNotify(options.skipDialogue);
@@ -32,7 +37,7 @@ public class OptionsManager : MonoBehaviour
 
     public void HideOptions()
     {
-        foreach(Transform t in transform)
+        foreach (Transform t in transform)
         {
             t.gameObject.SetActive(false);
         }

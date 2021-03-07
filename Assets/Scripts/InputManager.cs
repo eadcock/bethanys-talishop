@@ -42,7 +42,6 @@ public class InputManager : MonoBehaviour
         audioManager = GameMaster.Instance.Audio;
     }
 
-    bool bugFlag;
     // Update is called once per frame
     void Update()
     {
@@ -63,10 +62,13 @@ public class InputManager : MonoBehaviour
                 break;
             case GameState.Outro:
             case GameState.Intro:
-                DialogueUpdate();
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     BroadcastMessage("Pause");
+                }
+                else
+                {
+                    DialogueUpdate();
                 }
                 break;
         }
@@ -166,26 +168,5 @@ public class InputManager : MonoBehaviour
             }
         }
         return null;
-    }
-
-    public void RestartPuzzle()
-    {
-        //Gets and resets all dots
-        GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
-        Dot[] dots = dotObjects.Select(o => o.GetComponent<Dot>()).ToArray();
-        foreach (Dot dot in dots)
-        {
-            dot.Reset();
-        }
-
-        //Gets and destroys all circles
-        GameObject[] circles = GameObject.FindGameObjectsWithTag("Circle");
-        for(int i = circles.Length - 1; i >= 0; i--)
-        {
-            Destroy(circles[i]);
-        }
-
-        //Returns to game state
-        GameMaster.Instance.GameStateManager.SwapState(0);
     }
 }
