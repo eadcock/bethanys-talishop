@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using quiet;
 
 public class Dot : MonoBehaviour
 {
-
-    [SerializeField]
-    int requiredCircles = 1;
+    public int requiredCircles = 1;
     int currentCircles;
-
-    public Color[] Colors;
 
     public float X
     {
@@ -26,10 +23,11 @@ public class Dot : MonoBehaviour
         get { return requiredCircles == currentCircles; }
     }
 
+    public void Deconstruct(out Vector2 position, out int required, out int current, out bool finished) => (position, required, current, finished) = (transform.position.StripZ(), requiredCircles, CurrentCircles, FinishedDot);
+
     public int CurrentCircles => currentCircles;
 
     private SpriteRenderer sr;
-    private Color circleColor;
 
     // Start is called before the first frame update
     void Start()
@@ -38,9 +36,6 @@ public class Dot : MonoBehaviour
         sr = gameObject.GetComponent<SpriteRenderer>();
         UpdateColor();
     }
-
-    // Update is called once per frame
-    void Update() { }
 
     public void AddCircle()
     {
@@ -65,42 +60,30 @@ public class Dot : MonoBehaviour
 
     void UpdateColor()
     {
-        Sprite newSprite = SpriteLoader.LoadAndCreate(BuildSpritePath());
+        string spritePath = BuildSpritePath();
+        Sprite newSprite = SpriteLoader.LoadAndCreate(spritePath);
         if (newSprite != null)
             sr.sprite = newSprite;
+
+        if(spritePath == $"Gems/Corrupted/{requiredCircles} Corrupted")
+        {
+            GameMaster.Instance.Audio.PlaySoundFX("Power down");
+        }
     }
 
     private string BuildSpritePath()
     {
-        string path = "Gems/";
-        switch (requiredCircles - currentCircles)
+        string path = "Gems/" + (requiredCircles - currentCircles) switch
         {
-            case 0:
-                path += $"Done/{requiredCircles} Done";
-                break;
-            case 1:
-                path += $"{requiredCircles}/{requiredCircles}Blue";
-                break;
-            case 2:
-                path += $"{requiredCircles}/{requiredCircles}Purple";
-                break;
-            case 3:
-                path += $"{requiredCircles}/{requiredCircles}Cyan";
-                break;
-            case 4:
-                path += $"{requiredCircles}/{requiredCircles}Green";
-                break;
-            case 5:
-                path += $"{requiredCircles}/{requiredCircles}Orange";
-                break;
-            case 6:
-                path += $"{requiredCircles}/{requiredCircles}Pink";
-                break;
-            default:
-                path += $"Corrupted/{requiredCircles} Corrupted";
-                break;
-        }
-
+            0 => $"Done/{requiredCircles} Done",
+            1 => $"{requiredCircles}/{requiredCircles}Blue",
+            2 => $"{requiredCircles}/{requiredCircles}Purple",
+            3 => $"{requiredCircles}/{requiredCircles}Cyan",
+            4 => $"{requiredCircles}/{requiredCircles}Green",
+            5 => $"{requiredCircles}/{requiredCircles}Orange",
+            6 => $"{requiredCircles}/{requiredCircles}Pink",
+            _ => $"Corrupted/{requiredCircles} Corrupted",
+        };
         return path;
     }
 }

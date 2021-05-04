@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Mute : MonoBehaviour, IPointerClickHandler
 {
-    private AudioManager am;
     [SerializeField]
     private Sprite playingSprite;
     [SerializeField]
@@ -16,34 +15,34 @@ public class Mute : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private Sprite muteSprite_h;
 
+    private (Sprite idle, Sprite hover) PlayingSprites => (playingSprite, playingSprite_h);
+    private (Sprite idle, Sprite hover) MuteSprites => (muteSprite, muteSprite_h);
+
     private ChangeOnHover coh;
     // Start is called before the first frame update
     void Start()
     {
-        am = FindObjectOfType<AudioManager>();
         coh = GetComponent<ChangeOnHover>();
+    }
+
+    private void SwapState((Sprite idle, Sprite hover) sprites)
+    {
+        (coh.DefaultSprite, coh.HoverSprite) = sprites;
+        coh.Image.sprite = coh.Image.sprite == sprites.idle ? sprites.idle : sprites.hover;
     }
 
     private void ToggleMute()
     {
-        if (am.IsPlaying)
+        if (GameMaster.Instance.Audio.IsMusicPlaying)
         {
-            am.MuteMusic();
-            coh.DefaultSprite = muteSprite;
-            coh.HoverSprite = muteSprite_h;
-
-            coh.Image.sprite = coh.Image.sprite == playingSprite ? muteSprite : muteSprite_h;
+            GameMaster.Instance.Audio.MuteMusic();
+            SwapState(MuteSprites);
         }
         else
         {
-            am.PlayMusic();
-            coh.DefaultSprite = playingSprite;
-            coh.HoverSprite = playingSprite_h;
-
-            coh.Image.sprite = coh.Image.sprite == muteSprite ? playingSprite : playingSprite_h;
+            GameMaster.Instance.Audio.PlayMusic();
+            SwapState(PlayingSprites);
         }
-
-        Debug.Log(am.IsPlaying);
     }
 
     public void OnPointerClick(PointerEventData pointerEventData) => ToggleMute();

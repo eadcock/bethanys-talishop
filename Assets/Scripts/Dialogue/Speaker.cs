@@ -7,6 +7,8 @@ public class Speaker
     string name;
     string color;
 
+    public void Deconstruct(out string name, out string color) => (name, color) = (this.name, this.color);
+
     public Speaker(string name, string color)
     {
         this.name = name;

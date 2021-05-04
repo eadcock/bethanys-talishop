@@ -18,6 +18,6 @@ public class NextPuzzle : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        GameMaster.Instance.SceneTransitioner.GoForward();
+        GameMaster.SceneTransitioner.GoForward();
     }
 }

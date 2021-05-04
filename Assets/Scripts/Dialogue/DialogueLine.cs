@@ -6,44 +6,17 @@ using System.Threading.Tasks;
 
 public struct DialogueLine
 {
-    private static Speaker beth;
-    public static Speaker Beth
-    {
-        get
-        {
-            if(beth is null)
-                beth = new Speaker("Beth", "blue");
-
-            return beth;
-        }
-    }
-
-    private static Speaker player;
-    public static Speaker Player
-    {
-        get
-        {
-            if (player is null)
-                player = new Speaker("Player", "white");
-
-            return player;
-        }
-    }
-
     public string Line => line;
     public Mood Mood => mood;
     public Speaker Speaker => speaker;
 
-    string line;
-    Mood mood;
-    Speaker speaker;
+    readonly string line;
+    readonly Mood mood;
+    readonly Speaker speaker;
 
-    public DialogueLine(string line, Mood mood, Speaker speaker)
-    {
-        this.line = line;
-        this.mood = mood;
-        this.speaker = speaker;
-    }
+    public void Deconstruct(out string line, out Mood mood, out Speaker speaker) => (line, mood, speaker) = (Line, Mood, Speaker);
+
+    public DialogueLine(string line, Mood mood, Speaker speaker) => (this.line, this.mood, this.speaker) = (line, mood, speaker);
 
     public override string ToString()
     {

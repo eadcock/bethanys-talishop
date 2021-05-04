@@ -28,7 +28,10 @@ public class ChangeOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         
     }
 
-    public void OnPointerEnter(PointerEventData pointerEventData) => image.sprite = hoverSprite;
+    public void OnPointerEnter(PointerEventData pointerEventData)
+    {
+        image.sprite = hoverSprite;
+    }
 
     public void OnPointerExit(PointerEventData pointerEventData) => image.sprite = defaultSprite;
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using quiet;
 
 public enum GoBackTo
 {
@@ -11,13 +12,29 @@ public enum GoBackTo
 
 public class OptionsManager : MonoBehaviour
 {
-    public static Options options = new Options(false);
+    public static Options options = new Options(false, new AudioSettings());
 
     public static void UpdateSkipDialgue(bool val)
     {
         options.skipDialogue = val;
-        
+        GameMaster.Instance.Audio.PlaySoundFX("UIClick");
+
         SyncOptions();
+    }
+
+    public static void MasterVolumeOnChange(float value)
+    {
+        GameMaster.Instance.Audio.SetVolume(VolumeSlider.Master, (Float01)value);
+    }
+
+    public static void MusicVolumeOnChange(float value)
+    {
+        GameMaster.Instance.Audio.SetVolume(VolumeSlider.Music, (Float01)value);
+    }
+
+    public static void SoundFxVolumeOnChange(float value)
+    {
+        GameMaster.Instance.Audio.SetVolume(VolumeSlider.SoundFX, (Float01)value);
     }
 
     public void DisplayOptions()
@@ -28,6 +45,15 @@ public class OptionsManager : MonoBehaviour
             {
                 case "SkipDialogue":
                     t.gameObject.GetComponent<Toggle>().SetIsOnWithoutNotify(options.skipDialogue);
+                    break;
+                case "MasterVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.masterVolume);
+                    break;
+                case "MusicVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.rawMusicVolume);
+                    break;
+                case "SoundFXVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.rawSoundFxVolume);
                     break;
             }
 
@@ -43,7 +69,7 @@ public class OptionsManager : MonoBehaviour
         }
 
         SyncOptions();
-        GameMaster.Instance.Save.SaveToProfile(GameMaster.Instance.Save.CurrentProfile, options);
+        GameMaster.Instance.Save.SaveToFile(GameMaster.Instance.Save.CurrentProfile, options);
     }
 
     public static void SyncOptions()
@@ -66,7 +92,16 @@ public class OptionsManager : MonoBehaviour
             switch(t.gameObject.name)
             {
                 case "SkipDialogue":
-                    t.gameObject.GetComponent<Toggle>().isOn = options.skipDialogue;
+                    t.gameObject.GetComponent<Toggle>().SetIsOnWithoutNotify(options.skipDialogue);
+                    break;
+                case "MasterVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.masterVolume);
+                    break;
+                case "MusicVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.rawMusicVolume);
+                    break;
+                case "SoundFXVolumeSlider":
+                    t.gameObject.GetComponent<Slider>().SetValueWithoutNotify(options.audioSettings.rawSoundFxVolume);
                     break;
             }
         }

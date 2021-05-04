@@ -11,8 +11,9 @@ public class Dialogue : IEnumerable<DialogueLine>
 {
     public static Dictionary<string, Speaker> speakers = new Dictionary<string, Speaker>()
     {
-        { "beth", DialogueLine.Beth },
-        { "player", DialogueLine.Player },
+        { "beth", new Speaker("Bethany", "blue") },
+        { "player", new Speaker("Player", "white") },
+        { "unknown", new Speaker("Unknown", "white") },
     };
 
     public DialogueLine[] lines;
@@ -22,13 +23,7 @@ public class Dialogue : IEnumerable<DialogueLine>
     private int currentLine;
 
     public Dialogue(IEnumerable<DialogueLine> lines, int level, string init = "start")
-    {
-        this.lines = lines.ToArray();
-        this.level = level;
-        this.init = init;
-
-        currentLine = -1;
-    }
+        => (this.lines, this.level, this.init, currentLine) = (lines.ToArray(), level, init, -1);
 
     public Dialogue(XmlNode text)
     {
@@ -45,17 +40,14 @@ public class Dialogue : IEnumerable<DialogueLine>
         this.level = level;
         this.init = text.Attributes?["init"].Value ?? "start";
 
-        if(text.Attributes["end-behaviour"] != null)
+        if (text.Attributes["end-behaviour"] != null)
         {
-            switch(text.Attributes["end-behaviour"].Value)
-            {
-                default:
-                    endBehaviour = () => { };
-                    break;
-                case "next-level":
-                    endBehaviour = GameMaster.Instance.SceneTransitioner.GoForward;
-                    break;
-            }
+            endBehaviour = 
+                text.Attributes["end-behaviour"].Value switch
+                {
+                    "next-level" => GameMaster.SceneTransitioner.GoForward,
+                    _ => () => { },
+                };
         }
         else
         {
@@ -65,13 +57,7 @@ public class Dialogue : IEnumerable<DialogueLine>
         currentLine = -1;
     }
 
-    public DialogueLine? GetLine(int index)
-    {
-        if (index.InRange(0, lines.Length - 1))
-            return lines[index];
-
-        return null;
-    }
+    public DialogueLine? GetLine(int index) => index.InRange(0, lines.Length - 1) ? (DialogueLine?)lines[index] : null;
 
     public DialogueLine? GetNextLine()
     {

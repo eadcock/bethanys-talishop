@@ -6,15 +6,7 @@ public static class SpriteLoader
 {
     private static Dictionary<string, Texture2D> _sprites;
 
-    private static Dictionary<string, Texture2D> Sprites
-    {
-        get
-        {
-            if (_sprites != null) return _sprites;
-            _sprites = new Dictionary<string, Texture2D>();
-            return _sprites;
-        }
-    }
+    private static Dictionary<string, Texture2D> Sprites => _sprites ??= new Dictionary<string, Texture2D>();
 
     public static void Add(string key, Texture2D sprite)
     {
@@ -31,7 +23,7 @@ public static class SpriteLoader
 
     public static Texture2D Get(string key) => Sprites.ContainsKey(key) ? Sprites[key] : null;
 
-    public static Texture2D Load(string path)
+    public static Texture2D Load(string path) 
     {   
         Texture2D s = Get(path);
         if (s != null)
@@ -49,11 +41,10 @@ public static class SpriteLoader
         return null;
     }
 
-    public static Sprite LoadAndCreate(string path)
-    {
-        Texture2D texture = Load(path);
-        if (texture == null) return null;
-
-        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
-    }
+    public static Sprite LoadAndCreate(string path) => Load(path) 
+        switch
+        {
+            null => null,
+            var texture => Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f),
+        };
 }

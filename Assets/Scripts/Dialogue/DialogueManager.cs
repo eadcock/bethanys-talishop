@@ -40,12 +40,12 @@ public class DialogueManager : MonoBehaviour
             {
                 bethObject = go;
             }
-            else
+            else if (go.name == "Dialogue Box")
             {
                 textObject = go;
                 foreach(Transform t in go.transform)
                 {
-                    text = t.GetComponent<TMPro.TextMeshProUGUI>();
+                    text ??= t.GetComponent<TMPro.TextMeshProUGUI>();
                 }
             }
         }
@@ -84,6 +84,7 @@ public class DialogueManager : MonoBehaviour
         GameMaster.Instance.GameStateManager.SwapState(resumeState);
         CurrentDialogue?.endBehaviour();
         currentDialogue++;
+        if (currentDialogue > dialogue.Count - 1) currentDialogue = 0;
         GameMaster.Instance.Save.SaveDialogueToProfile(GameMaster.Instance.Save.CurrentProfile, currentDialogue);
     }
 

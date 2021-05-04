@@ -42,15 +42,11 @@ public class Beth : MonoBehaviour
 
     public string GetSpritePath(Mood mood)
     {
-        string root = "Beth/";
-        switch(mood)
+        return "Beth/" + mood switch
         {
-            case Mood.Smile:
-                return root + "Front_Smile";
-            case Mood.Right:
-                return root + "Right";
-            default:
-                return root + "Front_Talk";
-        }
+            Mood.Smile => "Front_Smile",
+            Mood.Right => "Right",
+            _ => "Front_Talk",
+        };
     }
 }

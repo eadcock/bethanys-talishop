@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using quiet;
+using System;
 
 public enum GameState
 {
@@ -17,27 +18,45 @@ public enum GameState
 
 public class GameMaster : MonoBehaviour
 {
+    public const int NUM_PUZZLES = 23;
+
     private static GameMaster _instance;
 
-    public static GameMaster Instance => _instance == null ? _instance = FindObjectOfType<GameMaster>() : _instance;
+    public static GameMaster Instance => _instance ??= FindObjectOfType<GameMaster>();
 
-    private SaveManager _save;
+    private static SaveManager _save;
 
-    public SaveManager Save => _save == null ? (_save = gameObject.AddComponent<SaveManager>()) : _save;
+    public SaveManager Save => _save ??= gameObject.AddComponent<SaveManager>();
 
-    private InputManager _input;
+    private static InputManager _input;
 
-    public InputManager Input => _input == null ? (_input = gameObject.AddComponent<InputManager>()) : _input;
+    public InputManager Input => _input ??= gameObject.AddComponent<InputManager>();
 
-    private AudioManager _audio;
+    private static AudioManager _audio;
 
-    public AudioManager Audio => _audio == null ? (_audio = gameObject.AddComponent<AudioManager>()) : _audio;
+    public AudioManager Audio => _audio ??= GetComponentInChildren<AudioManager>();
 
-    private DialogueManager _dialogue;
+    private static DialogueManager _dialogue;
 
-    public DialogueManager Dialogue => _dialogue == null ? (_dialogue = gameObject.AddComponent<DialogueManager>()) : _dialogue;
+    public DialogueManager Dialogue => _dialogue ??= gameObject.AddComponent<DialogueManager>();
 
-    public SceneTrans SceneTransitioner { get; private set; }
+    private static MoveManager _move;
+
+    public MoveManager MoveManager {
+        get
+        {
+            if(_move == null)
+            {
+                if(!TryGetComponent<MoveManager>(out _move))
+                {
+                    _move = gameObject.AddComponent<MoveManager>();
+                }
+            }
+
+            return _move;
+        }
+    }
+    public static SceneTrans SceneTransitioner { get; private set; }
 
     public StateManager<GameState> GameStateManager { get; private set; }
     public GameState CurrentGameState => GameStateManager.State;
@@ -80,40 +99,38 @@ public class GameMaster : MonoBehaviour
         InitIfNeeded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
         SceneTransitioner = GetComponent<SceneTrans>();
+
+#if UNITY_EDITOR
+        _ = Instance.Save;
+        Instance.Save.CurrentProfile = "Dev";
+        Instance.Save.SaveLevelToProfile("Dev", NUM_PUZZLES / 2);
+#endif
     }
     
     // If components don't currently exist, ensure that they do when a scene is loaded.
-    public void InitIfNeeded(Scene scene, LoadSceneMode _)
+    public void InitIfNeeded(Scene scene, LoadSceneMode lsm)
     {
-        if (_save is null)
-            _save = gameObject.AddComponent<SaveManager>();
+        _ = Instance.Save;
+        _ = Instance.Input;
+        _ = Instance.Audio;
+        _ = Instance.MoveManager;
 
-        if (_input is null)
-            _input = gameObject.AddComponent<InputManager>();
-
-        if (_audio is null)
-            _audio = gameObject.AddComponent<AudioManager>();
-
-        if (SceneTransitioner == null)
-        {
-            SceneTransitioner = gameObject.AddComponent<SceneTrans>();
-        }
+        SceneTransitioner ??= gameObject.AddComponent<SceneTrans>();
 
         if (ActiveLevel != null)
         {
             if (_dialogue is null)
             {
-                _dialogue = gameObject.AddComponent<DialogueManager>();
-                Dialogue.Init();
-                Dialogue.LoadDialogue();
+                _ = Instance.Dialogue;
+                Instance.Dialogue.Init();
+                Instance.Dialogue.LoadDialogue();
             }
             else
             {
-                Dialogue.Init();
+                Instance.Dialogue.Init();
             }
 
-            GameObject[] endObjects = GameObject.FindGameObjectsWithTag("EndPanel");
-            foreach (GameObject o in endObjects)
+            foreach (GameObject o in GameObject.FindGameObjectsWithTag("EndPanel"))
             {
                 if (o.name == "Forward")
                 {
@@ -128,10 +145,10 @@ public class GameMaster : MonoBehaviour
             }
 
             // Check if there is any intro dialogue
-            if (Dialogue.ShouldStart(GameState.Intro))
+            if (Instance.Dialogue.ShouldStart(GameState.Intro))
             {
                 Instance.GameStateManager.SwapState(GameState.Intro);
-                Dialogue.StartPlayingDialogue(GameState.Playing);
+                Instance.Dialogue.StartPlayingDialogue(GameState.Playing);
             }
             else
             {
@@ -154,7 +171,8 @@ public class GameMaster : MonoBehaviour
             CurrentCircle.transform.position = new Vector3(CurrentDot.X, CurrentDot.Y, 0);
             CurrentCircle.ResizeCircle(new Vector2(CurrentDot.X, CurrentDot.Y), Input.MousePosition);
             return true;
-        } else if ((circleToDelete = Input.GetCircleOnMouse()) != null)
+        } 
+        else if ((circleToDelete = Input.GetCircleOnMouse()) != null)
         {
             circleToDelete.DeleteCircle();
             TestPuzzleComplete();
@@ -178,31 +196,25 @@ public class GameMaster : MonoBehaviour
             Vector2 displacement = new Vector2(selectedDot.X - CurrentDot.X, selectedDot.Y - CurrentDot.Y);
             // Gets displacement angle
             float angle = Vector2.SignedAngle(new Vector2(1, 0), displacement);
-            Dot dot1, dot2;
-            if(Mathf.Abs(angle) == 90)
-            {
-                dot1 = Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.y / 2, CurrentDot.Y + displacement.y / 2));
-                dot2 = Input.GetDotAtPos(new Vector2(CurrentDot.X - displacement.y / 2, CurrentDot.Y + displacement.y / 2));
-            }
-            else if (angle == 0 || angle == 180)
-            {
-                dot1 = Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.x / 2, CurrentDot.Y + displacement.x / 2));
-                dot2 = Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.x / 2, CurrentDot.Y - displacement.x / 2));
-            }
-            else
-            {
-                dot1 = dot2 = null;
-            }
+            (Dot, Dot) peripherals = angle switch {
+                float a when Mathf.Abs(angle) is 90.0f => 
+                    (Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.y / 2, CurrentDot.Y + displacement.y / 2)),
+                    Input.GetDotAtPos(new Vector2(CurrentDot.X - displacement.y / 2, CurrentDot.Y + displacement.y / 2))),
+                float a when angle is 0.0f || angle is 180.0f =>
+                    (Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.x / 2, CurrentDot.Y + displacement.x / 2)),
+                    Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.x / 2, CurrentDot.Y - displacement.x / 2))),
+                _ => (null, null)
+            };
 
-            if (dot1 == null || dot2 == null)
+            if (peripherals is (null, null))
             {
                 Destroy(CurrentCircle.gameObject);
             }
             else
             {
-                IEnumerable<Circle> circles = GameObject.FindGameObjectsWithTag("Circle").Select(e => e.GetComponent<Circle>());
+                (Dot dot1, Dot dot2) = peripherals;
                 bool doesCircleExist = false;
-                foreach (Circle circle in circles)
+                foreach (Circle circle in GameObject.FindGameObjectsWithTag("Circle").Select(e => e.GetComponent<Circle>()))
                 {
                     if (circle.ConnectedDots != null &&
                                 !(
@@ -216,21 +228,22 @@ public class GameMaster : MonoBehaviour
                         break;
                     }
                 }
+
                 if (doesCircleExist)
                 {
                     Destroy(CurrentCircle.gameObject);
                 }
                 else
                 {
-                    List<Dot> addedDots = new List<Dot>
-                    {
+                    CurrentCircle.AddCircle(new Dot[] {
                         dot1,
                         dot2,
                         selectedDot,
                         CurrentDot
-                    };
+                    });
 
-                    CurrentCircle.AddCircle(addedDots);
+                    MoveManager.ClearUndone();
+                    MoveManager.PushMove(CurrentCircle);
 
                     CurrentDot = null;
 
@@ -243,40 +256,27 @@ public class GameMaster : MonoBehaviour
     /// <summary>
     /// Logic for drawing the circle.
     /// </summary>
-    public void DrawCircle()
-    {
-        Dot snapDot;
-        if(snapDot = Input.GetDotOnMouse())
-        {
-            if((snapDot.X == CurrentCircle.X) || (snapDot.Y == CurrentCircle.Y))
+    public void DrawCircle() => 
+        CurrentCircle.ResizeCircle(
+            new Vector2(CurrentDot.X, CurrentDot.Y),
+            Input.GetDotOnMouse() switch
             {
-                CurrentCircle.ResizeCircle(new Vector2(CurrentDot.X, CurrentDot.Y), new Vector2(snapDot.X, snapDot.Y));
-            }
-            else
-            {
-                CurrentCircle.ResizeCircle(new Vector2(CurrentDot.X, CurrentDot.Y), Input.MousePosition);
-            }
-        }
-        else
-        {
-            CurrentCircle.ResizeCircle(new Vector2(CurrentDot.X, CurrentDot.Y), Input.MousePosition);
-        }
-    }
+                null => Input.MousePosition,
+                var snapDot => snapDot.transform.position switch
+                {
+                    var (x, y, _) when x == CurrentDot.X || y == CurrentDot.Y => new Vector2(x, y),
+                    _ => Input.MousePosition,
+                },
+            });
 
     /// <summary>
     /// Determine if the puzzle is complete. If it is, begin end puzzle logic
     /// </summary>
     public void TestPuzzleComplete()
     {
-        GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
-        IEnumerable<Dot> dots = dotObjects.Select(o => o.GetComponent<Dot>());
-        foreach (Dot dot in dots)
-        {
-            if (!dot.FinishedDot)
-            {
-                return;
-            }
-        }
+        // If there is a single dot not completed, the puzzle isn't complete!
+        if (GameObject.FindGameObjectsWithTag("Dot").Select(o => o.GetComponent<Dot>()).Any(d => !d.FinishedDot)) return;
+
         //End puzzle logic here
         BroadcastMessage("EndPuzzle", SendMessageOptions.DontRequireReceiver);
         if(Dialogue.ShouldStart(GameState.Outro))
@@ -298,6 +298,8 @@ public class GameMaster : MonoBehaviour
     {
         if (ActiveLevel is null) return;
 
+        Instance.Audio.PlaySoundFX("Complete");
+
         SaveData data = Save.LoadFromProfile(Save.CurrentProfile);
         if (data != null)
         {
@@ -314,14 +316,16 @@ public class GameMaster : MonoBehaviour
         foreach(GameObject o in Resources.FindObjectsOfTypeAll<GameObject>())
             if (o.name == "EndPanel" || o.name == "Forward")
                 o.SetActive(true);
+
+        MoveManager.Reset();
     }
 
     private static GameState stateBeforePause;
 
     public void Pause()
     {
+        if (SceneManager.GetActiveScene().name == "Title") return;
         GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().Pause();
-        Debug.Log(Instance.CurrentGameState);
         stateBeforePause = Instance.CurrentGameState;
         Instance.GameStateManager.SwapState(GameState.Paused);
     }
@@ -340,16 +344,14 @@ public class GameMaster : MonoBehaviour
         Application.Quit();
     }
 
-    public static void SwapToScene(string scene) => Instance.SceneTransitioner.ToScene(scene);
+    public static void SwapToScene(string scene) => SceneTransitioner.ToScene(scene);
 
-    public static void SwapToScene(Scene scene) => Instance.SceneTransitioner.ToScene(scene.name);
+    public static void SwapToScene(Scene scene) => SceneTransitioner.ToScene(scene.name);
 
     public void RestartPuzzle()
     {
         //Gets and resets all dots
-        GameObject[] dotObjects = GameObject.FindGameObjectsWithTag("Dot");
-        Dot[] dots = dotObjects.Select(o => o.GetComponent<Dot>()).ToArray();
-        foreach (Dot dot in dots)
+        foreach (Dot dot in GameObject.FindGameObjectsWithTag("Dot").Select(o => o.GetComponent<Dot>()).AsEnumerable())
         {
             dot.Reset();
         }
@@ -361,7 +363,12 @@ public class GameMaster : MonoBehaviour
             Destroy(circles[i]);
         }
 
+        MoveManager.Reset();
+
         //Returns to game state
         Instance.GameStateManager.SwapState(0);
     }
+
+    public void Undo() => MoveManager.Undo();
+    public void Redo() => MoveManager.Redo();
 }

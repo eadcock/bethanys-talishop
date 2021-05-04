@@ -28,4 +28,6 @@ public class SaveData
     public SaveData(int _currentLevel, string _saveName, Options _options) : this(_currentLevel, _saveName) => options = _options;
 
     public SaveData(int _currentLevel, string _saveName, Options _options, int _currentDialogue) : this(_currentLevel, _saveName, _options) => currentDialogue = _currentDialogue;
+
+    public void Deconstruct(out int level, out string name, out Options ops, out int dialogue) => (level, name, ops, dialogue) = (currentLevel, saveName, options, currentDialogue);
 }

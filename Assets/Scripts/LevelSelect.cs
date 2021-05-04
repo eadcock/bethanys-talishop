@@ -19,9 +19,7 @@ public class LevelSelect : MonoBehaviour
 
         //Gets all level buttons
         Button[] levelButtons = GetComponentsInChildren<Button>();
-
-
-        for (int i = 0; i < levelButtons.Length - 1; i++)
+        for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].interactable = i < currentLevel;
         }

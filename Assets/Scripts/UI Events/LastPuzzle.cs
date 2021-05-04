@@ -22,11 +22,11 @@ public class LastPuzzle : MonoBehaviour, IPointerClickHandler
     {
         if(GameMaster.Instance.ActiveLevel == 1)
         {
-            GameMaster.Instance.SceneTransitioner.ToScene("LevelSelect");
+            GameMaster.SceneTransitioner.ToScene("LevelSelect");
         }
         else
         {
-            GameMaster.Instance.SceneTransitioner.GoBackward();
+            GameMaster.SceneTransitioner.GoBackward();
         }
     }
 }
