@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialogue>
   <chapter level="1" init="intro" end-behaviour="none">
-    <line speaker="beth" mood="smile">Oh my god! Hi! I'm so happy you decided to lend a hand around here. It&apos;s pretty lonely... er, let&apos;s jump right in!</line>
-    <line speaker="beth" mood="talk">You're new to making talismans, right? Don't worry, I can tell you everything you need to know. It&apos;s not that difficult, trust!</line>
-    <line speaker="beth" mood="right">See, these gems have innate magical properties. By linking circles together, the gems' magic can be stabalized and utilized for our own desires. Really precise stuff, but you don't have to worry about that. Sorcerers far smarter than you and me have already figured this stuff out.</line>
-    <line speaker="beth" mood="talk">Now, give it a go. Click on a gem to bring out it's magic. Then, click on another gem attempt to complete the circuit. The circuit requires exactly 4 gems to be stable. Otherwise, it'll dissipate.</line>
+    <line speaker="beth" mood="smile">Oh my god! Hi! I&apos;m so happy you decided to lend a hand around here. It&apos;s pretty lonely... er, let&apos;s jump right in!</line>
+    <line speaker="beth" mood="talk">You&apos;re new to making talismans, right? Don&apos;t worry, I can tell you everything you need to know. It&apos;s not that difficult, trust me!</line>
+    <line speaker="beth" mood="right">See, these gems have innate magical properties. By linking circles together, the gems&apos;s magic can be stabalized and utilized for our own purposes. Really precise stuff, but you don&apos;t have to worry about that. Sorcerers far smarter than you and me have already figured this stuff out.</line>
+    <line speaker="beth" mood="talk">Now, give it a go. Click on a gem and you&apos;ll see a white circle. That&apos;s the gem&apos;s way of linking to other gems! Then, click on another gem attempt to complete the circuit. If exactly 4 gems are touching the circle, the circuit will be stabalized. Otherwise, it&apos;ll dissipate.</line>
     <line speaker="beth" mood="talk">Here, give it a shot. Stabalize these 4 gems.</line>
   </chapter>
   <chapter level="1" init="outro" end-behaviour="next-level">
-    <line speaker="beth" mood="smile">Look at you getting the hang of things! I'm so proud of you!</line>
-    <line speaker="beth" mood="talk">Oooh, I&apos;m so excited. You're gonna be making cool stuff in no time! Only up!</line>
+    <line speaker="beth" mood="smile">Look at you getting the hang of things! I&apos;m so proud of you!</line>
+    <line speaker="beth" mood="talk">Oooh, I&apos;m so excited. You&apos;re gonna be making cool stuff in no time! Only up!</line>
   </chapter>
   <chapter level="2" init="intro" end-behaviour="none">
     <line speaker="beth" mood="right">Look at this gem! This is where things start getting interesting!</line>
@@ -36,6 +36,6 @@
     <line speaker="beth" mood="talk">Thank you so much! That&apos;s all the talismans I need for now. Maybe thanks to your help we&apos;ll get more commissions!</line>
     <line speaker="beth" mood="smile">While we wait for more customer&apos;s to commission more talismans from us, it&apos;s always good to keep your skills sharp. You can practice on unlimited talismans.</line>
     <line speaker="beth" mood="talk">These ones aren&apos;t as curated as the ones you&apos;ve been doing, so their quality can&apos;t be guarenteed. But you know what they say: quantity over quality! Or, well, something like that!</line>
-    <line speaker="beth" mood="talk">Again, thanks so much, you've helped my little shop so much! I&apos;m looking forward to working more with you in the future. Ta!</line>
+    <line speaker="beth" mood="talk">Again, thanks so much, you&apos;ve helped my little shop so much! I&apos;m looking forward to working more with you in the future. Ta!</line>
   </chapter>
 </dialogue>

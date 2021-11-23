@@ -43,21 +43,20 @@ public class DialogueManager : MonoBehaviour
             else if (go.name == "Dialogue Box")
             {
                 textObject = go;
-                foreach(Transform t in go.transform)
-                {
-                    text ??= t.GetComponent<TMPro.TextMeshProUGUI>();
-                }
+                text = textObject.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             }
         }
     }
 
     public void StartPlayingDialogue(GameState resumeState)
     {
+        Init();
         DialogueManager.resumeState = resumeState;
 
         // Display beth and the text box
         bethObject.SetActive(true);
         textObject.SetActive(true);
+        Debug.Log("Start!");
         DisplayNextLine();
     }
 
@@ -91,7 +90,12 @@ public class DialogueManager : MonoBehaviour
     public bool ShouldStart(GameState phase)
     {
         if (!currentDialogue.InRange(0, dialogue.Count - 1) || GameMaster.Instance.Save.CurrentSaveData.options.skipDialogue) return false;
-        return GameMaster.Instance.ActiveLevel == CurrentDialogue.level && phase.ToString().ToLower() == CurrentDialogue.init;
+        if (GameMaster.Instance.ActiveLevel == CurrentDialogue.level && phase.ToString().ToLower() == CurrentDialogue.init)
+            return true;
+        else
+        {
+            return false;
+        }
     }
 
     // Update is called once per frame

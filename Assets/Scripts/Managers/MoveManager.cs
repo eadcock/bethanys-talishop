@@ -68,8 +68,20 @@ public class MoveManager : MonoBehaviour
     public void Undo()
     {
         if (moves.Count == 0) return;
+        if (!Peek(moves))
+        {
+            Pop(moves);
+            Undo();
+            return;
+        }
         Push(undoneMoves, Pop(moves));
-        Peek(undoneMoves).PhantomDelete();
+        if (Peek(undoneMoves))
+            Peek(undoneMoves).PhantomDelete();
+        else
+        {
+            Undo();
+            return;
+        }
         Moves++;
     }
 
@@ -79,8 +91,15 @@ public class MoveManager : MonoBehaviour
     public void Redo()
     {
         if (undoneMoves.Count == 0) return;
+        if (!Peek(undoneMoves))
+        {
+            Pop(undoneMoves);
+            Redo();
+        }
         Push(moves, Pop(undoneMoves));
-        Peek(moves).AddCircle(Peek(moves).ConnectedDots);
+        if (Peek(moves))
+            Peek(moves).AddCircle(Peek(moves).ConnectedDots);
+        else Redo();
         Moves++;
     }
 
@@ -89,7 +108,7 @@ public class MoveManager : MonoBehaviour
     /// </summary>
     public void ClearUndone()
     {
-        undoneMoves.Clear();
+        undoneMoves?.Clear();
     }
 
     /// <summary>
@@ -97,13 +116,8 @@ public class MoveManager : MonoBehaviour
     /// </summary>
     public void Reset()
     {
-        undoneMoves.Clear();
-        moves.Clear();
+        undoneMoves?.Clear();
+        moves?.Clear();
         Moves = 0;
-    }
-
-    private void OnGUI()
-    {
-        GUI.Box(new Rect(5, 5, 100, 20), $"Moves: {Moves}");
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using quiet;
-using UnityEditor;
 using System.Linq;
 
+[RequireComponent(typeof(Grid))]
 public class RandomPuzzleGenerator : MonoBehaviour
 {
     [Flags]
@@ -17,6 +17,7 @@ public class RandomPuzzleGenerator : MonoBehaviour
         LowSizeVariance     = 0b_0000_0100,
         RandomSizeVariance  = 0b_0000_1000,
         HighSizeVariance    = 0b_0001_0000,
+        RandomNumDots       = 0b_0010_0000,
         PureRandom = RandomPlacement | RandomSizeVariance,
         Focused = FavorConnections | LowSizeVariance,
         Volatile = RandomPlacement | HighSizeVariance,
@@ -60,16 +61,22 @@ public class RandomPuzzleGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        layout = GetComponent<Grid>();
         selectRegion = (new RangeInt(0, MAX_HEIGHT - 1), new RangeInt(0, MAX_WIDTH - 1));
         localRegion = selectRegion;
 
         grid = new Graph(MAX_HEIGHT, MAX_WIDTH, layout, dotPrefab, circlePrefab);
         grid.PopulateGrid();
+        if ((generationStyle & GenStyle.RandomNumDots) != GenStyle.None)
+            numCircles = UnityEngine.Random.Range(7, 25);
         CreateRandomTalisman(generationStyle);
     }
 
+    public void CreateRandomTalisman() => CreateRandomTalisman(generationStyle);
+
     public void CreateRandomTalisman(GenStyle generationStyle)
     {
+        grid.Clear();
         if (generationStyle == GenStyle.None) return;
         GenStyle sizeFlag = generationStyle & SIZE_FLAGS;
         GenStyle placementFlag = generationStyle & PLACEMENT_FLAGS;
@@ -147,7 +154,10 @@ public class RandomPuzzleGenerator : MonoBehaviour
                 int i = 0;
                 for(; (newNode == null || newNode.HasCircleOfWeight(weight)) && i < 4; i++)
                 {
-                    newNode = grid[d.X + (dir.x * weight), d.Y + (dir.y * weight)];
+                    if ((d.X + dir.x * weight).InRange(0, grid.Height - 1) && (d.Y + dir.y * weight).InRange(0, grid.Width - 1))
+                        newNode = grid[d.X + (dir.x * weight), d.Y + (dir.y * weight)];
+                    else
+                        Debug.LogWarning("Node could not be created at " + d.X + dir.x * weight + ", " + d.Y + dir.y * weight);
                 }
                 if (i == 4)
                 {
@@ -167,8 +177,6 @@ public class RandomPuzzleGenerator : MonoBehaviour
         Keyframe frame = new Keyframe(time, value, 0.0f, 0.0f);
         int index = curve.AddKey(frame);
         Debug.Assert(index != -1, "Frame {" + frame + "} could not be added");
-        AnimationUtility.SetKeyLeftTangentMode(curve, index, AnimationUtility.TangentMode.Constant);
-        AnimationUtility.SetKeyRightTangentMode(curve, index, AnimationUtility.TangentMode.Constant);
     }
 
     public int ConstrainFavored(int favored)

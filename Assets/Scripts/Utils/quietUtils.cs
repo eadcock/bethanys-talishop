@@ -776,4 +776,89 @@ namespace quiet
     }
 
     #endregion
+
+    namespace Timers
+    {
+        public class DoAfter : MonoBehaviour
+        {
+            public float Interval { get; set; }
+            public Action Action { get; set; }
+
+            public float birth = 0;
+
+            public void Start()
+            {
+                birth = Time.time;
+            }
+
+            public void Update()
+            {
+                if (Time.time - birth >= Interval)
+                {
+                    Action.Invoke();
+                    Destroy(gameObject);
+                }
+            }
+
+            public static DoAfter DoAfterFactory(Action action, float interval = 1) => DoAfterFactory(new GameObject(), action, interval);
+
+            public static DoAfter DoAfterFactory(GameObject go, Action action, float interval = 1)
+            {
+                DoAfter da = go.AddComponent<DoAfter>();
+                da.Interval = interval;
+                da.Action = action;
+
+                return da;
+            }
+        }
+
+        public class DoEvery : MonoBehaviour
+        {
+            public float Interval { get; set; }
+            public Action Action { get; set; }
+            public uint Loops;
+            public bool Pause { get; set; }
+            public float Until;
+
+            private float birth = 0;
+            private float start = 0;
+
+            public void Start()
+            {
+                birth = start = Time.time;
+            }
+
+            public void Update()
+            {
+                if (Pause)
+                    return;
+
+                if (Until > 0 && Until <= Time.time) Destroy(gameObject);
+
+                if (Time.time - start >= Interval)
+                {
+                    Action.Invoke();
+                    start = Time.time;
+                }
+
+                Loops = Loops == uint.MaxValue ? 0 : Loops + 1;
+            }
+
+            public static DoEvery DoEveryFactory(Action action, float interval = 1, float until = -1) => DoEveryFactory(new GameObject(), action, interval, until);
+
+            public static DoEvery DoEveryFactory(GameObject go, Action action, float interval = 1, float until = -1)
+            {
+                DoEvery de = go.AddComponent<DoEvery>();
+                de.Interval = interval;
+                de.Action = action;
+                de.Pause = false;
+                if (until > 0)
+                {
+                    de.Until = Time.time + until;
+                }
+
+                return de;
+            }
+        }
+    }
 }

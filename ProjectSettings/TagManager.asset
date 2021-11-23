@@ -12,6 +12,7 @@ TagManager:
   - GameMaster
   - Dialogue
   - LevelButton
+  - OptionPanel
   layers:
   - Default
   - TransparentFX

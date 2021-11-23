@@ -16,6 +16,13 @@ public enum GameState
     Ending
 }
 
+public enum ValidShape
+{
+    Invalid,
+    Circle,
+    Square
+}
+
 public class GameMaster : MonoBehaviour
 {
     public const int NUM_PUZZLES = 23;
@@ -42,12 +49,16 @@ public class GameMaster : MonoBehaviour
 
     private static MoveManager _move;
 
+    public LineManager Line => _line ??= gameObject.AddComponent<LineManager>();
+
+    private static LineManager _line;
+
     public MoveManager MoveManager {
         get
         {
             if(_move == null)
             {
-                if(!TryGetComponent<MoveManager>(out _move))
+                if(!TryGetComponent(out _move))
                 {
                     _move = gameObject.AddComponent<MoveManager>();
                 }
@@ -100,10 +111,13 @@ public class GameMaster : MonoBehaviour
 
         SceneTransitioner = GetComponent<SceneTrans>();
 
-#if UNITY_EDITOR
+        //DoEvery.DoEveryFactory(GetComponent<RandomPuzzleGenerator>().CreateRandomTalisman);
+
+        // Use the dev save while in editor to have everything unlocked
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         _ = Instance.Save;
         Instance.Save.CurrentProfile = "Dev";
-        Instance.Save.SaveLevelToProfile("Dev", NUM_PUZZLES / 2);
+        Instance.Save.SaveLevelToProfile("Dev", 5);
 #endif
     }
     
@@ -114,6 +128,8 @@ public class GameMaster : MonoBehaviour
         _ = Instance.Input;
         _ = Instance.Audio;
         _ = Instance.MoveManager;
+        Instance.MoveManager.Reset();
+        _ = Instance.Line;
 
         SceneTransitioner ??= gameObject.AddComponent<SceneTrans>();
 
@@ -162,7 +178,7 @@ public class GameMaster : MonoBehaviour
     /// Attempt to start drawing a circle
     /// </summary>
     /// <returns>If we can start drawing</returns>
-    public bool TryStartDrawing()
+    public bool Old_TryStartDrawing()
     {
         Circle circleToDelete;
         if ((CurrentDot = Input.GetDotOnMouse()) != null)
@@ -178,6 +194,49 @@ public class GameMaster : MonoBehaviour
             TestPuzzleComplete();
         }
         return false;
+    }
+
+    public ValidShape ValidateDrawnShape(List<Dot> selectedDots)
+    {
+        if(selectedDots.Count > 3)
+        {
+            if (CheckSquare(selectedDots.ToArray()))
+            {
+                return ValidShape.Square;
+            }
+        }
+
+
+        return ValidShape.Invalid;
+    }
+
+    public bool CheckSquare(params Dot[] slice)
+    {
+        if (slice.Length != 4) return false;
+
+        float[] distances = VectorUtils.CalcSqDistances(
+            slice[0].transform.position, 
+            new Vector3[]{ slice[1].transform.position, slice[2].transform.position, slice[3].transform.position }
+            ).ToArray();
+
+        if (distances.Any(v => v == 0)) return false;
+
+        return
+            (
+                distances[0] == distances[1] &&
+                2 * distances[0] == distances[2] &&
+                2 * VectorUtils.CalcSqDistance(slice[1].transform.position, slice[3].transform.position) == VectorUtils.CalcSqDistance(slice[1].transform.position, slice[2].transform.position)
+            ) ||
+            (
+                distances[1] == distances[2] &&
+                2 * distances[1] == distances[0] &&
+                2 * VectorUtils.CalcSqDistance(slice[2].transform.position, slice[1].transform.position) == VectorUtils.CalcSqDistance(slice[2].transform.position, slice[3].transform.position)
+            ) ||
+            (
+                distances[0] == distances[2] &&
+                2 * distances[0] == distances[1] &&
+                2 * VectorUtils.CalcSqDistance(slice[1].transform.position, slice[2].transform.position) == VectorUtils.CalcSqDistance(slice[1].transform.position, slice[3].transform.position)
+            );
     }
 
     /// <summary>
@@ -205,8 +264,7 @@ public class GameMaster : MonoBehaviour
                     Input.GetDotAtPos(new Vector2(CurrentDot.X + displacement.x / 2, CurrentDot.Y - displacement.x / 2))),
                 _ => (null, null)
             };
-
-            if (peripherals is (null, null))
+            if (peripherals is (_, null) || peripherals is (null, _))
             {
                 Destroy(CurrentCircle.gameObject);
             }
@@ -251,6 +309,16 @@ public class GameMaster : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void AdditiveLoad(string sceneName)
+    {
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    }
+
+    public void RemoveScene(string sceneName)
+    {
+        SceneManager.UnloadSceneAsync(sceneName);
     }
 
     /// <summary>
@@ -333,6 +401,7 @@ public class GameMaster : MonoBehaviour
     public void UnPause()
     {
         GameObject.FindGameObjectWithTag("PausePanel").GetComponent<PauseManager>().UnPause();
+        GameObject.FindGameObjectWithTag("OptionPanel").GetComponent<OptionsManager>().HideOptions();
         Instance.GameStateManager.SwapState(stateBeforePause);
     }
 

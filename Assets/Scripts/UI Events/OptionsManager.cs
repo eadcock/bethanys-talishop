@@ -63,13 +63,16 @@ public class OptionsManager : MonoBehaviour
 
     public void HideOptions()
     {
-        foreach (Transform t in transform)
+        if(transform.GetChild(0).gameObject.activeInHierarchy)
         {
-            t.gameObject.SetActive(false);
-        }
+            foreach (Transform t in transform)
+            {
+                t.gameObject.SetActive(false);
+            }
 
-        SyncOptions();
-        GameMaster.Instance.Save.SaveToFile(GameMaster.Instance.Save.CurrentProfile, options);
+            SyncOptions();
+            GameMaster.Instance.Save.SaveToFile(GameMaster.Instance.Save.CurrentProfile, options);
+        }
     }
 
     public static void SyncOptions()

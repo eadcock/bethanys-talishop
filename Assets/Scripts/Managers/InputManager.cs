@@ -20,10 +20,13 @@ public class InputManager : MonoBehaviour
 
     public Vector2 MousePosition;
 
+    public List<Dot> selectedDots;
+
     // Start is called before the first frame update
     void Start()
     {
         ClickStateManager = new StateManager<ClickState>(ClickState.Waiting);
+        selectedDots = new List<Dot>();
     }
 
     // Update is called once per frame
@@ -65,11 +68,49 @@ public class InputManager : MonoBehaviour
     private void GameUpdate()
     {
         MousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()).StripZ();
+        if(CurrentClickState is ClickState.Waiting)
+        {
+            if(Mouse.current.leftButton.wasPressedThisFrame && GameMaster.Instance.Old_TryStartDrawing())
+            {
+                ClickStateManager.SwapState(ClickState.Drawing);
+                Debug.Log("Start drawing");
+            }
+        }
+        else if (CurrentClickState is ClickState.Drawing)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                Debug.Log("Stop drawing");
+                ClickStateManager.SwapState(ClickState.Waiting);
+                /*Debug.Log(GameMaster.Instance.CheckSquare(selectedDots.ToArray()));
+                GameMaster.Instance.Line.StopDrawing();*/
+                GameMaster.Instance.StopDrawing();
+                ClearSelected();
+                Debug.Log("Stop drawing");
+            }
+            else 
+            {
+                GameMaster.Instance.DrawCircle();
+            }
+        }
+    }
+
+    public void ClearSelected()
+    {
+        foreach(Dot d in selectedDots)
+        {
+            d.Selected = false;
+        }
+        selectedDots.Clear();
+    }
+
+    public void DrawOldMethod()
+    {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             if (!(ClickStateManager.State is ClickState.Drawing))
             {
-                if(GameMaster.Instance.TryStartDrawing())
+                if (GameMaster.Instance.Old_TryStartDrawing())
                 {
                     ClickStateManager.SwapState(ClickState.Drawing);
                 }
@@ -80,7 +121,7 @@ public class InputManager : MonoBehaviour
                 GameMaster.Instance.StopDrawing();
             }
         }
-        else if(Mouse.current.leftButton.wasReleasedThisFrame)
+        else if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             if (ClickStateManager.State is ClickState.Dragging)
                 ClickStateManager.SwapState(ClickState.Waiting);
@@ -91,7 +132,7 @@ public class InputManager : MonoBehaviour
             GameMaster.Instance.DrawCircle();
         }
 
-        if(GameMaster.Instance.CurrentCircle != null && GameMaster.Instance.CurrentCircle.IsDrawn)
+        if (GameMaster.Instance.CurrentCircle != null && GameMaster.Instance.CurrentCircle.IsDrawn)
         {
             GameMaster.Instance.CurrentCircle = null;
         }

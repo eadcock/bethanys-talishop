@@ -23,6 +23,8 @@ public class Dot : MonoBehaviour
         get { return requiredCircles == currentCircles; }
     }
 
+    public bool Selected { get; set; }
+
     public void Deconstruct(out Vector2 position, out int required, out int current, out bool finished) => (position, required, current, finished) = (transform.position.StripZ(), requiredCircles, CurrentCircles, FinishedDot);
 
     public int CurrentCircles => currentCircles;
@@ -35,6 +37,7 @@ public class Dot : MonoBehaviour
         currentCircles = 0;
         sr = gameObject.GetComponent<SpriteRenderer>();
         UpdateColor();
+        Selected = false;
     }
 
     public void AddCircle()

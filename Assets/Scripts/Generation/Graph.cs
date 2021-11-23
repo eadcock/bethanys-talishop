@@ -66,7 +66,6 @@ public class Graph
         {
             Dot d = UnityEngine.Object.Instantiate(dotPrefab);
             d.transform.position = layout.CellToWorld(new Vector3Int(node.X - Width / 2, node.Y - Height / 2, 0));
-            Debug.Log("Creating dot at: " + d.transform.position);
             d.requiredCircles = node.Dot.Value.connections.Count;
             node.dotObject = d;
         }

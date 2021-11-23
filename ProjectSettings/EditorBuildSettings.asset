@@ -83,4 +83,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Puzzle23.unity
     guid: f74054a0f1cafbe48b63ac40bdb46047
+  - enabled: 1
+    path: Assets/Scenes/Puzzle_template.unity
+    guid: 5221abb6a2582cd4a9b1ff2ce383bdcc
   m_configObjects: {}

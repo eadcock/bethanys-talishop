@@ -29,10 +29,6 @@ public class SceneTrans : MonoBehaviour
                 objectsToMove.Add(o);
             }
         }
-        else
-        {
-            
-        }
         Initiate.Fade(sceneName, Color.black, 1);
     }
 
@@ -41,7 +37,7 @@ public class SceneTrans : MonoBehaviour
         if (GameMaster.Instance.ActiveLevel != null)
         {
             string nextNumPuzzle = $"Puzzle{GameMaster.Instance.ActiveLevel + 1}";
-            string nextScene = GameMaster.Instance.ActiveLevel + 1 < GameMaster.NUM_PUZZLES  ? nextNumPuzzle : "Test";
+            string nextScene = GameMaster.Instance.ActiveLevel + 1 < GameMaster.NUM_PUZZLES  ? nextNumPuzzle : "Puzzle_template";
             Initiate.Fade(nextScene, Color.black, 1);
         }
         
